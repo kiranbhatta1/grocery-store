@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taaja Bazaar — Groceries delivered fresh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4EFE3;
+  --surface:#FFFFFF;
+  --night:#152238;
+  --night-soft:#22345279;
+  --ink:#1E2A38;
+  --ink-soft:#5C6675;
+  --marigold:#E8890C;
+  --marigold-dark:#BE6E04;
+  --brick:#A6382B;
+  --brick-soft:#F6E2DE;
+  --teal:#0E6E5C;
+  --teal-soft:#DDEDE7;
+  --line:#E1D9C4;
+  --radius:8px;
+  --shadow:0 1px 0 rgba(21,34,56,0.04), 0 10px 24px rgba(21,34,56,0.07);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,.display{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-0.01em;margin:0;color:var(--night);}
+.mono{font-family:'Space Mono',monospace;}
+a{color:inherit;}
+button{font-family:inherit;cursor:pointer;}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
+:focus-visible{outline:3px solid var(--marigold-dark);outline-offset:2px;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+#app{min-height:100vh;display:flex;flex-direction:column;}
+main{flex:1;}
+
+/* ---------- header ---------- */
+.topbar{background:var(--night);color:#CBD3DE;font-size:12.5px;}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;padding:6px 0;flex-wrap:wrap;gap:6px;}
+.topbar a{text-decoration:none;color:#CBD3DE;}
+header.site{position:sticky;top:0;z-index:50;background:var(--night);color:#EFEAD8;border-bottom:3px solid var(--marigold);}
+.nav-row{display:flex;align-items:center;gap:18px;padding:14px 0;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;flex-shrink:0;}
+.brand-mark{width:40px;height:40px;border-radius:10px;background:var(--marigold);color:var(--night);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:16px;flex-shrink:0;}
+.brand-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px;line-height:1;}
+.brand-tag{font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#93A0B3;margin-top:3px;}
+.search-form{flex:1;min-width:180px;max-width:480px;display:flex;background:#1E314F;border-radius:999px;padding:4px 4px 4px 16px;align-items:center;gap:8px;}
+.search-form input{flex:1;background:transparent;border:none;color:#fff;font-size:14px;padding:8px 0;}
+.search-form input::placeholder{color:#8391A6;}
+.search-form input:focus{outline:none;}
+.search-form button{background:var(--marigold);color:var(--night);border:none;border-radius:999px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.search-form button:hover{background:#fff;}
+nav.links{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+nav.links a{text-decoration:none;color:#C8D0DC;font-size:14px;font-weight:600;padding:4px 2px;border-bottom:2px solid transparent;display:flex;align-items:center;gap:5px;}
+nav.links a.active,nav.links a:hover{color:#fff;border-bottom-color:var(--marigold);}
+.icon-btn-nav{position:relative;}
+.badge-count{position:absolute;top:-8px;right:-12px;background:var(--brick);color:#fff;font-size:10.5px;min-width:17px;height:17px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;}
+.cat-strip{background:#1B2E4A;border-top:1px solid #26395A;}
+.cat-strip .wrap{display:flex;gap:22px;overflow-x:auto;padding:9px 28px;scrollbar-width:none;}
+.cat-strip .wrap::-webkit-scrollbar{display:none;}
+.cat-strip a{white-space:nowrap;font-size:13px;color:#AEB9C8;text-decoration:none;font-weight:500;}
+.cat-strip a:hover{color:#fff;}
+
+/* ---------- footer ---------- */
+footer.site{background:var(--night);color:#9AA6B6;margin-top:64px;}
+.footer-inner{padding:48px 0 24px;display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;}
+.footer-inner h3{color:#fff;font-size:17px;margin-bottom:10px;}
+.footer-inner p{font-size:13.5px;line-height:1.6;max-width:300px;margin:0;}
+.footer-cols{display:flex;gap:48px;flex-wrap:wrap;}
+.footer-col a{display:block;color:#9AA6B6;text-decoration:none;font-size:13.5px;margin-bottom:8px;}
+.footer-col a:hover{color:#fff;}
+.footer-col h4{color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;font-family:'Inter';font-weight:700;}
+.footer-bottom{border-top:1px solid #26395A;padding:16px 0 26px;font-size:11.5px;color:#6C7A8F;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.pay-badges{display:flex;gap:8px;}
+.pay-badges span{background:#22345279;padding:4px 10px;border-radius:5px;font-size:11px;font-family:'Space Mono',monospace;color:#C8D0DC;}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:8px;font-weight:700;font-size:14.5px;border:2px solid transparent;text-decoration:none;transition:transform .12s ease;justify-content:center;}
+.btn:hover{transform:translateY(-1px);}
+.btn-primary{background:var(--marigold);color:var(--night);}
+.btn-primary:hover{background:var(--marigold-dark);color:#fff;}
+.btn-outline{border-color:var(--night);color:var(--night);background:transparent;}
+.btn-outline:hover{background:var(--night);color:#fff;}
+.btn-dark{background:var(--night);color:#fff;}
+.btn-dark:hover{background:#0E1926;}
+.btn-danger{background:var(--brick-soft);color:var(--brick);}
+.btn-danger:hover{background:var(--brick);color:#fff;}
+.btn-sm{padding:7px 14px;font-size:12.5px;border-radius:999px;}
+.btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.btn-block{width:100%;}
+
+/* ---------- receipt / ledger signature ---------- */
+.receipt{background:var(--surface);position:relative;padding:26px 26px 30px;box-shadow:var(--shadow);
+  --tooth:14px;
+  clip-path: polygon(0 var(--tooth),3% 0,6% var(--tooth),9% 0,12% var(--tooth),15% 0,18% var(--tooth),21% 0,24% var(--tooth),27% 0,30% var(--tooth),33% 0,36% var(--tooth),39% 0,42% var(--tooth),45% 0,48% var(--tooth),51% 0,54% var(--tooth),57% 0,60% var(--tooth),63% 0,66% var(--tooth),69% 0,72% var(--tooth),75% 0,78% var(--tooth),81% 0,84% var(--tooth),87% 0,90% var(--tooth),93% 0,96% var(--tooth),100% 0,100% 100%,96% calc(100% - var(--tooth)),93% 100%,90% calc(100% - var(--tooth)),87% 100%,84% calc(100% - var(--tooth)),81% 100%,78% calc(100% - var(--tooth)),75% 100%,72% calc(100% - var(--tooth)),69% 100%,66% calc(100% - var(--tooth)),63% 100%,60% calc(100% - var(--tooth)),57% 100%,54% calc(100% - var(--tooth)),51% 100%,48% calc(100% - var(--tooth)),45% 100%,42% calc(100% - var(--tooth)),39% 100%,36% calc(100% - var(--tooth)),33% 100%,30% calc(100% - var(--tooth)),27% 100%,24% calc(100% - var(--tooth)),21% 100%,18% calc(100% - var(--tooth)),15% 100%,12% calc(100% - var(--tooth)),9% 100%,6% calc(100% - var(--tooth)),3% 100%,0 calc(100% - var(--tooth)));
+}
+.receipt-head{text-align:center;border-bottom:1px dashed var(--line);padding-bottom:16px;margin-bottom:16px;}
+.receipt-head .mono{font-size:11.5px;color:var(--ink-soft);letter-spacing:0.06em;text-transform:uppercase;}
+.receipt-line{display:flex;justify-content:space-between;font-size:13.5px;padding:6px 0;color:var(--ink-soft);font-family:'Space Mono',monospace;}
+.receipt-line.total{color:var(--ink);font-weight:700;font-size:16px;border-top:1px dashed var(--line);padding-top:12px;margin-top:4px;}
+.receipt-divider{border-top:1px dashed var(--line);margin:14px 0;}
+
+/* ---------- hero ---------- */
+.hero{padding:0;position:relative;background:var(--night);color:#fff;overflow:hidden;}
+.hero-inner{display:grid;grid-template-columns:1.05fr 0.95fr;gap:40px;align-items:center;padding:56px 0;}
+.hero h1{font-size:clamp(32px,4.6vw,50px);line-height:1.08;color:#fff;}
+.hero p.lede{font-size:16.5px;color:#C8D0DC;max-width:460px;margin-top:16px;line-height:1.6;}
+.hero-actions{margin-top:26px;display:flex;gap:14px;flex-wrap:wrap;}
+.eyebrow{font-family:'Space Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;color:var(--brick);}
+.eyebrow.on-dark{color:var(--marigold);}
+.hero-dots{display:flex;gap:8px;margin-top:22px;}
+.hero-dots button{all:unset;cursor:pointer;width:22px;height:4px;border-radius:2px;background:#3B4C68;}
+.hero-dots button.active{background:var(--marigold);}
+.hero-visual{position:relative;height:320px;}
+.hero-card{position:absolute;background:var(--surface);color:var(--ink);border-radius:14px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,0.35);}
+.hero-card.c1{top:0;left:20px;width:190px;}
+.hero-card.c2{bottom:10px;right:0;width:210px;}
+.hero-card .r{display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;color:var(--ink-soft);}
+.hero-card .r b{color:var(--ink);font-family:'Space Mono',monospace;}
+
+/* ---------- ticker ---------- */
+.ticker-wrap{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;}
+.ticker{display:flex;white-space:nowrap;animation:scroll 34s linear infinite;padding:11px 0;}
+.ticker span{font-family:'Space Mono',monospace;font-size:12.5px;color:var(--ink-soft);padding:0 20px;border-right:1px solid var(--line);}
+@keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@media (prefers-reduced-motion:reduce){.ticker{animation:none;}}
+
+/* ---------- category grid ---------- */
+.cat-section{padding:52px 0 20px;}
+.cat-heading{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:26px;flex-wrap:wrap;gap:10px;}
+.cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;}
+@media (max-width:980px){.cat-grid{grid-template-columns:repeat(3,1fr);}}
+@media (max-width:560px){.cat-grid{grid-template-columns:repeat(2,1fr);}}
+.cat-tile{all:unset;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;font-size:12.5px;font-weight:600;color:var(--ink);transition:border-color .15s, transform .15s;}
+.cat-tile svg{width:30px;height:30px;color:var(--teal);}
+.cat-tile:hover{border-color:var(--marigold);transform:translateY(-2px);}
+
+/* ---------- product grid / cards ---------- */
+.section-title-row{display:flex;justify-content:space-between;align-items:baseline;margin:48px 0 20px;flex-wrap:wrap;gap:10px;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+@media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:560px){.grid{grid-template-columns:1fr;}.hero-inner{grid-template-columns:1fr;padding:40px 0;}.hero-visual{height:220px;margin-top:10px;}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);display:flex;flex-direction:column;position:relative;overflow:hidden;box-shadow:var(--shadow);}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 10px 0;}
+.card-tag{background:var(--teal-soft);color:var(--teal);font-family:'Space Mono',monospace;font-size:10.5px;padding:4px 9px;border-radius:5px;letter-spacing:0.02em;}
+.card-tag.sale{background:var(--brick-soft);color:var(--brick);}
+.wish-btn{all:unset;cursor:pointer;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--ink-soft);background:var(--bg);}
+.wish-btn:hover{color:var(--brick);}
+.wish-btn.active{color:var(--brick);}
+.wish-btn svg{width:16px;height:16px;}
+.card-icon{display:flex;align-items:center;justify-content:center;height:96px;cursor:pointer;}
+.card-icon svg{width:58px;height:58px;}
+.card-body{padding:0 16px 16px;display:flex;flex-direction:column;gap:5px;flex:1;}
+.card-body h3{font-size:15.5px;cursor:pointer;}
+.card-unit{font-size:12px;color:var(--ink-soft);}
+.stars{color:var(--marigold);font-size:12px;letter-spacing:1px;}
+.stars .count{color:var(--ink-soft);font-family:'Inter';margin-left:4px;}
+.card-price-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;}
+.price{font-family:'Space Mono',monospace;font-weight:700;font-size:15px;color:var(--night);}
+.price-old{font-family:'Space Mono',monospace;font-size:12px;color:var(--ink-soft);text-decoration:line-through;margin-right:6px;}
+.add-btn{background:var(--night);color:#fff;border:none;border-radius:999px;padding:8px 14px;font-size:12.5px;font-weight:700;}
+.add-btn:hover{background:var(--marigold);color:var(--night);}
+.stock-low{color:var(--brick);font-size:11px;font-weight:700;}
+.stepper{display:flex;align-items:center;gap:9px;background:var(--bg);border-radius:999px;padding:4px 6px;}
+.stepper button{all:unset;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--night);color:#fff;font-weight:700;font-size:13px;}
+.stepper button:hover{background:var(--marigold);color:var(--night);}
+.stepper .qty{font-family:'Space Mono',monospace;font-weight:700;min-width:13px;text-align:center;font-size:13px;}
+
+/* ---------- chips ---------- */
+.chip-row{display:flex;gap:9px;flex-wrap:wrap;margin:24px 0 32px;}
+.chip{border:1.5px solid var(--night);color:var(--night);background:transparent;padding:7px 15px;border-radius:999px;font-size:13px;font-weight:600;}
+.chip.active,.chip:hover{background:var(--night);color:#fff;}
+
+/* ---------- page head ---------- */
+.page-head{padding:40px 0 6px;}
+.page-head .eyebrow{margin-bottom:8px;display:block;}
+.page-head h1{font-size:clamp(26px,3.6vw,38px);}
+.page-head p{color:var(--ink-soft);max-width:560px;margin-top:10px;font-size:15px;}
+
+/* ---------- product details ---------- */
+.pd-layout{display:grid;grid-template-columns:0.9fr 1.1fr;gap:40px;margin-top:10px;align-items:start;}
+@media (max-width:860px){.pd-layout{grid-template-columns:1fr;}}
+.pd-visual{background:var(--surface);border:1px solid var(--line);border-radius:14px;height:320px;display:flex;align-items:center;justify-content:center;}
+.pd-visual svg{width:150px;height:150px;color:var(--teal);}
+.pd-price-row{display:flex;align-items:baseline;gap:12px;margin:14px 0;}
+.pd-price-row .price{font-size:26px;}
+.qty-row{display:flex;align-items:center;gap:16px;margin:18px 0;}
+.review-item{border-top:1px solid var(--line);padding:14px 0;}
+.review-item .who{font-weight:700;font-size:13.5px;}
+.review-item .when{font-size:11.5px;color:var(--ink-soft);margin-left:8px;}
+.review-item p{margin:6px 0 0;font-size:14px;color:var(--ink-soft);}
+
+/* ---------- cart / checkout ---------- */
+.cart-layout,.checkout-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:30px;align-items:start;margin-top:18px;}
+@media (max-width:860px){.cart-layout,.checkout-layout{grid-template-columns:1fr;}}
+.cart-row{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);}
+.cart-row .card-icon{height:auto;width:52px;flex-shrink:0;cursor:default;}
+.cart-row .card-icon svg{width:40px;height:40px;color:var(--teal);}
+.cart-row-name{flex:1;min-width:110px;}
+.cart-row-name h3{font-size:15px;}
+.remove-btn{all:unset;color:var(--brick);font-size:12.5px;cursor:pointer;margin-top:4px;}
+.remove-btn:hover{text-decoration:underline;}
+.cart-row .line-total{font-family:'Space Mono',monospace;font-weight:700;width:80px;text-align:right;}
+.empty-state{text-align:center;padding:64px 20px;}
+.empty-state svg{width:70px;height:70px;margin-bottom:16px;color:var(--line);}
+.empty-state p{color:var(--ink-soft);margin:10px 0 20px;}
+.coupon-row{display:flex;gap:8px;margin:14px 0;}
+.coupon-row input{flex:1;}
+.coupon-note{font-size:12px;color:var(--teal);margin-top:6px;}
+.coupon-note.err{color:var(--brick);}
+
+fieldset{border:none;padding:0;margin:0 0 26px;}
+legend{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;color:var(--night);margin-bottom:13px;padding:0;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;}
+.field-row.single{grid-template-columns:1fr;}
+@media (max-width:540px){.field-row{grid-template-columns:1fr;}}
+label{display:block;font-size:12.5px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:6px;font-family:'Inter',sans-serif;font-size:14px;background:var(--surface);color:var(--ink);}
+textarea{resize:vertical;min-height:80px;}
+input:focus,select:focus,textarea:focus{border-color:var(--marigold-dark);outline:none;}
+.error-text{color:var(--brick);font-size:12px;margin-top:5px;display:none;}
+.field-error input,.field-error select{border-color:var(--brick);}
+.field-error .error-text{display:block;}
+.pay-options{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0 20px;}
+@media (max-width:540px){.pay-options{grid-template-columns:1fr;}}
+.pay-opt{all:unset;cursor:pointer;border:2px solid var(--line);border-radius:10px;padding:18px;display:flex;align-items:center;gap:12px;background:var(--surface);}
+.pay-opt.selected{border-color:var(--marigold-dark);background:#FFF7EB;}
+.pay-opt .swatch{width:44px;height:44px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;flex-shrink:0;}
+.pay-opt .swatch.esewa{background:#5FA829;}
+.pay-opt .swatch.khalti{background:#5D2E8C;}
+.pay-opt .meta{text-align:left;}
+.pay-opt .meta strong{display:block;font-size:14.5px;}
+.pay-opt .meta span{font-size:11.5px;color:var(--ink-soft);}
+
+/* ---------- gateway simulation ---------- */
+.gateway-screen{max-width:440px;margin:40px auto;background:var(--surface);border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;}
+.gateway-head{padding:22px;color:#fff;text-align:center;}
+.gateway-head.esewa{background:#5FA829;}
+.gateway-head.khalti{background:#5D2E8C;}
+.gateway-head .mono{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.85;}
+.gateway-head h2{color:#fff;font-size:20px;margin-top:6px;}
+.gateway-body{padding:26px;text-align:center;}
+.gateway-body .amt{font-family:'Space Mono',monospace;font-size:30px;font-weight:700;color:var(--night);margin:10px 0 18px;}
+.gateway-spinner{width:38px;height:38px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--marigold-dark);margin:0 auto 16px;animation:spin 0.9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.gateway-disclaimer{font-size:11.5px;color:var(--ink-soft);background:var(--bg);border-radius:8px;padding:10px 12px;margin-top:16px;}
+
+/* ---------- confirmation ---------- */
+.confirm{text-align:center;padding:56px 20px 20px;}
+.confirm-badge{width:76px;height:76px;border-radius:50%;background:var(--teal-soft);color:var(--teal);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;}
+.confirm-badge svg{width:38px;height:38px;}
+.confirm h1{font-size:clamp(26px,3.6vw,34px);margin-bottom:10px;}
+.confirm p{color:var(--ink-soft);font-size:15px;}
+
+/* ---------- order tracking ---------- */
+.track-stepper{display:flex;justify-content:space-between;margin:34px 0 10px;position:relative;}
+.track-stepper::before{content:'';position:absolute;top:15px;left:5%;right:5%;height:2px;background:var(--line);z-index:0;}
+.track-step{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;flex:1;text-align:center;}
+.track-step .dot{width:32px;height:32px;border-radius:50%;background:var(--surface);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--ink-soft);}
+.track-step.done .dot{background:var(--teal);border-color:var(--teal);color:#fff;}
+.track-step.current .dot{background:var(--marigold);border-color:var(--marigold-dark);color:var(--night);}
+.track-step span.label{font-size:11.5px;font-weight:600;color:var(--ink-soft);max-width:80px;}
+.track-step.done span.label,.track-step.current span.label{color:var(--ink);}
+.track-cancelled{background:var(--brick-soft);color:var(--brick);border-radius:10px;padding:16px 18px;font-weight:600;margin:24px 0;}
+
+/* ---------- auth ---------- */
+.auth-card{max-width:420px;margin:0 auto;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);}
+.auth-toggle{display:flex;gap:8px;margin-bottom:22px;}
+.auth-toggle button{flex:1;background:transparent;border:1.5px solid var(--night);color:var(--night);border-radius:999px;padding:9px;font-weight:700;font-size:13px;}
+.auth-toggle button.active{background:var(--night);color:#fff;}
+.auth-error{background:var(--brick-soft);color:var(--brick);font-size:13px;padding:10px 12px;border-radius:6px;margin-bottom:14px;}
+.auth-note{background:var(--teal-soft);color:var(--teal);font-size:12px;padding:9px 12px;border-radius:6px;margin-bottom:14px;}
+
+/* ---------- profile / wishlist / orders list ---------- */
+.profile-grid{display:grid;grid-template-columns:220px 1fr;gap:30px;margin-top:20px;}
+@media (max-width:760px){.profile-grid{grid-template-columns:1fr;}}
+.profile-nav{display:flex;flex-direction:column;gap:4px;}
+.profile-nav button{all:unset;cursor:pointer;padding:11px 14px;border-radius:8px;font-size:14px;font-weight:600;color:var(--ink-soft);}
+.profile-nav button.active{background:var(--night);color:#fff;}
+.profile-panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);}
+
+/* ---------- FAQ accordion ---------- */
+.faq-item{border-bottom:1px solid var(--line);}
+.faq-q{all:unset;cursor:pointer;width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 4px;font-weight:700;font-size:15px;color:var(--night);}
+.faq-q .chev{transition:transform .2s;}
+.faq-item.open .faq-q .chev{transform:rotate(45deg);}
+.faq-a{padding:0 4px 18px;color:var(--ink-soft);font-size:14.5px;line-height:1.6;display:none;}
+.faq-item.open .faq-a{display:block;}
+
+/* ---------- admin ---------- */
+.admin-shell{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 0px);}
+@media (max-width:820px){.admin-shell{grid-template-columns:1fr;}}
+.admin-side{background:var(--night);color:#C8D0DC;padding:22px 16px;}
+.admin-side .brand{margin-bottom:26px;padding:0 6px;}
+.admin-side nav{display:flex;flex-direction:column;gap:2px;}
+.admin-side nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;text-decoration:none;color:#AEB9C8;font-size:13.5px;font-weight:600;}
+.admin-side nav a.active,.admin-side nav a:hover{background:#22345279;color:#fff;}
+.admin-side .logout-row{margin-top:20px;padding-top:16px;border-top:1px solid #26395A;}
+.admin-main{padding:30px 32px;background:var(--bg);min-height:100vh;}
+.admin-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:30px;}
+@media (max-width:900px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);}
+.stat-card .lbl{font-size:12px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.04em;font-weight:700;}
+.stat-card .val{font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:var(--night);margin-top:6px;}
+.stat-card .delta{font-size:12px;color:var(--teal);margin-top:4px;}
+.admin-table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.admin-table th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:0.04em;color:var(--ink-soft);background:var(--bg);padding:10px 12px;}
+.admin-table td{padding:10px 12px;border-top:1px solid var(--line);font-size:13px;vertical-align:middle;}
+.admin-table input,.admin-table select{padding:7px 9px;font-size:12.5px;}
+.admin-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.icon-btn{all:unset;cursor:pointer;font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;}
+.icon-btn.edit{background:var(--bg);color:var(--night);}
+.icon-btn.save{background:var(--night);color:#fff;}
+.icon-btn.delete{background:var(--brick-soft);color:var(--brick);}
+.status-pill{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;display:inline-block;}
+.status-pill.Pending{background:#FDEBD0;color:#9A6B00;}
+.status-pill.Confirmed{background:#DDEDE7;color:var(--teal);}
+.status-pill.Packed{background:#E4E9F5;color:#3A4E9C;}
+.status-pill.Out-for-Delivery{background:#FDE7D2;color:var(--marigold-dark);}
+.status-pill.Delivered{background:#DBEEDC;color:#1F7A34;}
+.status-pill.Cancelled{background:var(--brick-soft);color:var(--brick);}
+.add-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin-bottom:22px;}
+.add-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+@media (max-width:760px){.add-grid{grid-template-columns:1fr 1fr;}}
+@media (max-width:520px){.add-grid{grid-template-columns:1fr;}.admin-table{display:block;overflow-x:auto;white-space:nowrap;}}
+.bar-chart{display:flex;align-items:flex-end;gap:10px;height:160px;margin:20px 0;}
+.bar-chart .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.bar-chart .bar{width:100%;background:var(--marigold);border-radius:5px 5px 0 0;}
+.bar-chart .bar-lbl{font-size:10.5px;color:var(--ink-soft);}
+.two-col{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;align-items:start;}
+@media (max-width:900px){.two-col{grid-template-columns:1fr;}}
+.banner-card{display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:12px;}
+.banner-swatch{width:60px;height:44px;border-radius:6px;flex-shrink:0;}
+.settings-form{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;max-width:640px;}
+.save-toast{position:fixed;bottom:22px;right:22px;background:var(--night);color:#fff;padding:12px 18px;border-radius:8px;font-size:13.5px;box-shadow:var(--shadow);z-index:100;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ======================================================================
+   TAAJA BAZAAR — grocery e-commerce prototype
+   Client-side only. localStorage acts as the "database". Payments
+   (eSewa / Khalti) are fully SIMULATED — no real gateway is contacted.
+   This is a demo/dev scaffold, not a production-ready store.
+   ====================================================================== */
+
+/* ============ ICONS ============ */
+const ICONS = {
+  fruitveg: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="26" cy="38" r="16"/><path d="M26 22c2-5 7-8 13-8"/><path d="M40 30c6-2 12 2 14 8-4 6-12 8-18 4"/></svg>`,
+  dairy: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8h16l4 10-6 6v30a4 4 0 01-4 4H30a4 4 0 01-4-4V24l-6-6z"/><path d="M20 30h24"/></svg>`,
+  grains: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M32 10v44"/><path d="M32 16c6-2 10 0 12 6-6 2-10 0-12-6z"/><path d="M32 16c-6-2-10 0-12 6 6 2 10 0 12-6z"/><path d="M32 30c6-2 10 0 12 6-6 2-10 0-12-6z"/><path d="M32 30c-6-2-10 0-12 6 6 2 10 0 12-6z"/><path d="M32 44c6-2 10 0 12 6-6 2-10 0-12-6z"/><path d="M32 44c-6-2-10 0-12 6 6 2 10 0 12-6z"/></svg>`,
+  snacks: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 22h36l-4 30a4 4 0 01-4 4H22a4 4 0 01-4-4z"/><path d="M14 22l4-10h28l4 10"/><path d="M26 32v12M38 32v12"/></svg>`,
+  beverages: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M28 8h8v10l6 6v30a4 4 0 01-4 4H26a4 4 0 01-4-4V24l6-6z"/><path d="M24 30h16"/></svg>`,
+  oil: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 14h14l4 8-3 4v26a4 4 0 01-4 4H25a4 4 0 01-4-4V26l-3-4z"/><rect x="24" y="8" width="10" height="6" rx="1"/></svg>`,
+  spices: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 26h32v20a6 6 0 01-6 6H22a6 6 0 01-6-6V26z"/><path d="M16 26c0-8 7-14 16-14s16 6 16 14"/><circle cx="26" cy="36" r="1.6" fill="currentColor" stroke="none"/><circle cx="36" cy="40" r="1.6" fill="currentColor" stroke="none"/><circle cx="30" cy="44" r="1.6" fill="currentColor" stroke="none"/></svg>`,
+  bakery: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40c0-14 8-26 24-26s24 12 24 26v6c0 2-2 4-4 4H12c-2 0-4-2-4-4v-6z"/><path d="M20 30c2-4 6-6 12-6s10 2 12 6"/></svg>`,
+  frozen: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6v52M12 16l40 32M52 16L12 48"/><path d="M32 6l-5 6m5-6l5 6M32 58l-5-6m5 6l5-6"/></svg>`,
+  meat: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 32c8-12 24-16 36-8-2 6-2 10 0 16-12 8-28 4-36-8z"/><path d="M46 24l8-6-2 14 2 14-8-6"/><circle cx="20" cy="30" r="1.6" fill="currentColor" stroke="none"/></svg>`,
+  household: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 26l18-14 18 14v24a4 4 0 01-4 4H18a4 4 0 01-4-4V26z"/><path d="M26 54V38h12v16"/></svg>`,
+  personalcare: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M26 10h12v10l4 4v28a4 4 0 01-4 4H26a4 4 0 01-4-4V24l4-4z"/><path d="M24 30h16"/></svg>`,
+  apple: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M32 24c-7-8-20-6-22 4-2 11 6 26 16 30 3 1 5 1 8 0 3 1 5 1 8 0 10-4 18-19 16-30-2-10-15-12-22-4z"/><path d="M32 24c0-6 2-10 7-13"/></svg>`,
+  carrot: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 26c8-2 16 6 14 14L22 52 12 42c-2-8 0-14 8-16z"/><path d="M30 20c3-6 8-8 14-8"/><path d="M32 16c1-5 5-8 10-8"/></svg>`,
+  greens: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M32 54c-14 0-22-10-22-24 10 0 16 4 20 10 2-10 8-16 18-18 4 14-2 32-16 32z"/></svg>`,
+  tomato: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="38" r="18"/><path d="M24 22c2-4 6-6 8-6s6 2 8 6"/></svg>`,
+  milk: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8h16l4 10-6 6v30a4 4 0 01-4 4H30a4 4 0 01-4-4V24l-6-6z"/><path d="M20 30h24"/></svg>`,
+  egg: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M32 10C20 24 14 36 14 44a18 18 0 0036 0c0-8-6-20-18-34z"/></svg>`,
+  cheese: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 46L32 14l24 32z"/><circle cx="30" cy="38" r="2" fill="currentColor" stroke="none"/><circle cx="38" cy="42" r="2" fill="currentColor" stroke="none"/></svg>`,
+  rice: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="24" cy="26" rx="6" ry="10" transform="rotate(-20 24 26)"/><ellipse cx="36" cy="30" rx="6" ry="10" transform="rotate(10 36 30)"/><ellipse cx="30" cy="42" rx="6" ry="10" transform="rotate(-8 30 42)"/></svg>`,
+  biscuit: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="20"/><circle cx="24" cy="28" r="1.8" fill="currentColor" stroke="none"/><circle cx="38" cy="26" r="1.8" fill="currentColor" stroke="none"/><circle cx="32" cy="38" r="1.8" fill="currentColor" stroke="none"/></svg>`,
+  cola: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12h24l-3 40a5 5 0 01-5 5H28a5 5 0 01-5-5z"/><path d="M18 24h28"/></svg>`,
+  ghee: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 22h32v26a6 6 0 01-6 6H22a6 6 0 01-6-6V22z"/><path d="M18 22h28l-3-8H21z"/></svg>`,
+  masala: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="34" r="18"/><path d="M32 16v-6M22 20l-4-5M42 20l4-5"/></svg>`,
+  bread: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40c0-14 8-26 24-26s24 12 24 26v6c0 2-2 4-4 4H12c-2 0-4-2-4-4v-6z"/></svg>`,
+  peas: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 32c0-12 9-22 20-22s20 10 20 22-9 22-20 22-20-10-20-22z"/><circle cx="22" cy="28" r="3" fill="currentColor" stroke="none"/><circle cx="32" cy="24" r="3" fill="currentColor" stroke="none"/><circle cx="40" cy="34" r="3" fill="currentColor" stroke="none"/></svg>`,
+  chicken: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 44c-4-10 0-24 12-30 4 6 2 12-2 16 8-2 14 4 14 12 0 10-10 16-18 12-4-2-5-6-6-10z"/></svg>`,
+  fish: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 32c8-12 24-16 36-8-2 6-2 10 0 16-12 8-28 4-36-8z"/><path d="M46 24l8-6-2 14 2 14-8-6"/></svg>`,
+  soap: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="22" width="36" height="26" rx="8"/><path d="M22 22c0-6 4-10 10-10s10 4 10 10"/></svg>`,
+  broom: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M40 8L20 44"/><path d="M14 56l10-14 10 4-6 12z"/></svg>`,
+  jar: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="18" y="10" width="28" height="8" rx="2"/><path d="M16 22h32v28a6 6 0 01-6 6H22a6 6 0 01-6-6V22z"/></svg>`,
+  cart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 002 1.58h9.78a2 2 0 002-1.58l1.65-7.42H5.12"/></svg>`,
+  heart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>`,
+  heartFill: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>`,
+  user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-7 8-7s8 3 8 7"/></svg>`,
+  search: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`,
+  truck: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="14" height="11"/><path d="M15 10h4l3 3v4h-7z"/><circle cx="6" cy="19" r="2"/><circle cx="17.5" cy="19" r="2"/></svg>`,
+  check: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>`,
+  box: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>`,
+  emptyCart: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><circle cx="26" cy="52" r="3"/><circle cx="46" cy="52" r="3"/><path d="M6 8h8l6 32h30l6-22H16"/></svg>`,
+  emptyHeart: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2"><path d="M44 16a12 12 0 00-12 6 12 12 0 00-12-6c-8 0-14 6-14 14 0 12 16 22 26 30 10-8 26-18 26-30 0-8-6-14-14-14z"/></svg>`,
+  pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>`,
+  mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 6l10 7 10-7"/></svg>`,
+  phone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h4l2 5-2.5 2.5a14 14 0 006 6L16 15l5 2v4a2 2 0 01-2 2A18 18 0 014 6a2 2 0 012-2z"/></svg>`,
+  star: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3 6.5 7 .9-5.1 4.9 1.3 7-6.2-3.5-6.2 3.5 1.3-7L2 9.4l7-.9z"/></svg>`
+};
+function icon(name){ return ICONS[name] || ICONS.jar; }
+function starRow(rating){
+  let out = '';
+  for(let i=1;i<=5;i++){ out += `<span style="opacity:${i<=Math.round(rating)?1:0.25}">${icon('star')}</span>`; }
+  return `<span class="stars" style="display:inline-flex;gap:1px;vertical-align:middle;">${out}</span>`;
+}
+
+/* ============ CATEGORY + PRODUCT DATA ============ */
+const CATEGORIES = [
+  { id:'fruitveg', name:'Fruits & Vegetables', icon:'fruitveg' },
+  { id:'dairy', name:'Dairy & Eggs', icon:'dairy' },
+  { id:'grains', name:'Rice, Flour & Grains', icon:'grains' },
+  { id:'snacks', name:'Snacks & Biscuits', icon:'snacks' },
+  { id:'beverages', name:'Beverages', icon:'beverages' },
+  { id:'oil', name:'Cooking Oil & Ghee', icon:'oil' },
+  { id:'spices', name:'Spices & Masala', icon:'spices' },
+  { id:'bakery', name:'Bakery', icon:'bakery' },
+  { id:'frozen', name:'Frozen Foods', icon:'frozen' },
+  { id:'meat', name:'Meat & Seafood', icon:'meat' },
+  { id:'household', name:'Household Essentials', icon:'household' },
+  { id:'personalcare', name:'Personal Care', icon:'personalcare' }
+];
+
+const DEFAULT_PRODUCTS = [
+  {id:'p01',name:'Fresh Tomato',unit:'per kg',price:60,mrp:70,cat:'fruitveg',icon:'tomato',tag:'Fresh today',stock:40,rating:4.4,reviews:3},
+  {id:'p02',name:'Local Carrot',unit:'per kg',price:55,mrp:55,cat:'fruitveg',icon:'carrot',tag:'Farm fresh',stock:32,rating:4.2,reviews:2},
+  {id:'p03',name:'Green Spinach (Saag)',unit:'bundle',price:25,mrp:30,cat:'fruitveg',icon:'greens',tag:'Just picked',stock:18,rating:4.6,reviews:4},
+  {id:'p04',name:'Royal Gala Apple',unit:'per kg',price:280,mrp:320,cat:'fruitveg',icon:'apple',tag:'Imported',stock:26,rating:4.5,reviews:5},
+  {id:'p05',name:'Green Peas',unit:'per kg',price:110,mrp:110,cat:'fruitveg',icon:'peas',tag:'In season',stock:20,rating:4.1,reviews:2},
+  {id:'p06',name:'Fresh Cow Milk',unit:'1 litre',price:95,mrp:95,cat:'dairy',icon:'milk',tag:'Daily delivery',stock:50,rating:4.7,reviews:6},
+  {id:'p07',name:'Farm Eggs',unit:'tray of 12',price:210,mrp:230,cat:'dairy',icon:'egg',tag:'Free range',stock:34,rating:4.6,reviews:5},
+  {id:'p08',name:'Nepali Cheese Block',unit:'200 g',price:260,mrp:260,cat:'dairy',icon:'cheese',tag:'Himalayan',stock:15,rating:4.3,reviews:2},
+  {id:'p09',name:'Curd (Dahi)',unit:'400 g',price:70,mrp:70,cat:'dairy',icon:'dairy',tag:'Set fresh',stock:28,rating:4.5,reviews:3},
+  {id:'p10',name:'Basmati Rice',unit:'5 kg bag',price:850,mrp:900,cat:'grains',icon:'rice',tag:'Best seller',stock:22,rating:4.8,reviews:9},
+  {id:'p11',name:'Mansuli Rice',unit:'10 kg bag',price:1150,mrp:1150,cat:'grains',icon:'rice',tag:'Everyday staple',stock:18,rating:4.4,reviews:4},
+  {id:'p12',name:'Wheat Flour (Atta)',unit:'2 kg',price:180,mrp:200,cat:'grains',icon:'grains',tag:'Stone milled',stock:30,rating:4.3,reviews:3},
+  {id:'p13',name:'Yellow Lentils (Dal)',unit:'1 kg',price:230,mrp:230,cat:'grains',icon:'grains',tag:'Protein rich',stock:26,rating:4.5,reviews:3},
+  {id:'p14',name:'Real Biscuit Pack',unit:'6 pcs',price:120,mrp:130,cat:'snacks',icon:'biscuit',tag:'Family pack',stock:44,rating:4.2,reviews:5},
+  {id:'p15',name:'Wai Wai Noodles',unit:'pack of 6',price:180,mrp:180,cat:'snacks',icon:'snacks',tag:'Nepal favourite',stock:60,rating:4.6,reviews:11},
+  {id:'p16',name:'Roasted Makhana',unit:'150 g',price:210,mrp:230,cat:'snacks',icon:'snacks',tag:'Light snack',stock:16,rating:4.0,reviews:1},
+  {id:'p17',name:'Masala Chiura (Beaten Rice)',unit:'1 kg',price:150,mrp:150,cat:'snacks',icon:'rice',tag:'Local favourite',stock:20,rating:4.3,reviews:2},
+  {id:'p18',name:'Himalayan Spring Water',unit:'1 litre',price:30,mrp:30,cat:'beverages',icon:'beverages',tag:'Chilled',stock:80,rating:4.1,reviews:2},
+  {id:'p19',name:'Cola Soft Drink',unit:'1.5 litre',price:150,mrp:160,cat:'beverages',icon:'cola',tag:'Party pack',stock:36,rating:4.0,reviews:3},
+  {id:'p20',name:'Nepali Chiya (Tea Leaves)',unit:'250 g',price:180,mrp:180,cat:'beverages',icon:'beverages',tag:'Ilam garden',stock:24,rating:4.7,reviews:6},
+  {id:'p21',name:'Filter Coffee Powder',unit:'200 g',price:340,mrp:360,cat:'beverages',icon:'beverages',tag:'Roasted weekly',stock:14,rating:4.4,reviews:3},
+  {id:'p22',name:'Sunflower Cooking Oil',unit:'1 litre',price:280,mrp:300,cat:'oil',icon:'oil',tag:'Cholesterol free',stock:28,rating:4.3,reviews:4},
+  {id:'p23',name:'Mustard Oil',unit:'1 litre',price:310,mrp:310,cat:'oil',icon:'oil',tag:'Cold pressed',stock:20,rating:4.5,reviews:2},
+  {id:'p24',name:'Pure Desi Ghee',unit:'500 ml',price:650,mrp:700,cat:'oil',icon:'ghee',tag:'Small batch',stock:12,rating:4.8,reviews:7},
+  {id:'p25',name:'Everest Masala Mix',unit:'100 g',price:95,mrp:95,cat:'spices',icon:'masala',tag:'House blend',stock:38,rating:4.6,reviews:5},
+  {id:'p26',name:'Turmeric Powder',unit:'200 g',price:80,mrp:80,cat:'spices',icon:'spices',tag:'Single origin',stock:34,rating:4.4,reviews:3},
+  {id:'p27',name:'Red Chili Powder (Khursani)',unit:'200 g',price:110,mrp:120,cat:'spices',icon:'spices',tag:'Extra hot',stock:26,rating:4.3,reviews:2},
+  {id:'p28',name:'Cumin & Coriander Combo',unit:'150 g',price:130,mrp:130,cat:'spices',icon:'spices',tag:'Ground fresh',stock:18,rating:4.2,reviews:1},
+  {id:'p29',name:'Sourdough Loaf',unit:'each',price:220,mrp:250,cat:'bakery',icon:'bread',tag:'Baked today',stock:15,rating:4.7,reviews:4},
+  {id:'p30',name:'Milk Bread Buns',unit:'pack of 6',price:140,mrp:140,cat:'bakery',icon:'bread',tag:'Soft & fresh',stock:22,rating:4.5,reviews:3},
+  {id:'p31',name:'Frozen Mixed Vegetables',unit:'500 g',price:190,mrp:190,cat:'frozen',icon:'frozen',tag:'Ready to cook',stock:24,rating:4.1,reviews:2},
+  {id:'p32',name:'Frozen Chicken Momo',unit:'pack of 12',price:260,mrp:290,cat:'frozen',icon:'frozen',tag:'Steam & serve',stock:20,rating:4.6,reviews:6},
+  {id:'p33',name:'Chicken Breast',unit:'per kg',price:420,mrp:420,cat:'meat',icon:'chicken',tag:'Cleaned & cut',stock:16,rating:4.4,reviews:3},
+  {id:'p34',name:'Farm Mutton',unit:'per kg',price:1350,mrp:1400,cat:'meat',icon:'meat',tag:'Local farm',stock:8,rating:4.5,reviews:2},
+  {id:'p35',name:'River Fish (Rahu)',unit:'per kg',price:480,mrp:480,cat:'meat',icon:'fish',tag:'Line caught',stock:10,rating:4.2,reviews:1},
+  {id:'p36',name:'Dish Wash Liquid',unit:'500 ml',price:150,mrp:160,cat:'household',icon:'soap',tag:'Lemon fresh',stock:30,rating:4.3,reviews:2},
+  {id:'p37',name:'Floor Cleaner',unit:'1 litre',price:190,mrp:190,cat:'household',icon:'household',tag:'Disinfectant',stock:22,rating:4.1,reviews:1},
+  {id:'p38',name:'Coconut Broom',unit:'each',price:130,mrp:130,cat:'household',icon:'broom',tag:'Long handle',stock:14,rating:4.0,reviews:1},
+  {id:'p39',name:'Herbal Bathing Soap',unit:'pack of 3',price:180,mrp:200,cat:'personalcare',icon:'personalcare',tag:'Neem & tulsi',stock:26,rating:4.4,reviews:3},
+  {id:'p40',name:'Ayurvedic Shampoo',unit:'340 ml',price:320,mrp:320,cat:'personalcare',icon:'personalcare',tag:'Herbal care',stock:18,rating:4.3,reviews:2}
+];
+
+const DEFAULT_COUPONS = [
+  {code:'TAAJA10', type:'percent', value:10, minOrder:500, active:true, expiry:'2026-12-31'},
+  {code:'FLAT100', type:'flat', value:100, minOrder:1000, active:true, expiry:'2026-12-31'},
+  {code:'NEWUSER', type:'percent', value:15, minOrder:0, active:true, expiry:'2026-12-31'}
+];
+
+const DEFAULT_BANNERS = [
+  {id:'b1', title:'Dashain Bazaar Offers', subtitle:'Up to 20% off on staples and snacks', theme:'marigold'},
+  {id:'b2', title:'Fresh Vegetables, Daily', subtitle:'Sourced from local growers every morning', theme:'teal'},
+  {id:'b3', title:'Pay with eSewa or Khalti', subtitle:'Fast, cashless checkout at your door', theme:'brick'}
+];
+
+const DEFAULT_REVIEWS = [
+  {id:'r1',productId:'p10',name:'Sabina R.',rating:5,comment:'Great quality basmati rice, arrived the same day.',date:'2026-06-02'},
+  {id:'r2',productId:'p10',name:'Kiran T.',rating:5,comment:'Long grain, cooks up perfectly every time.',date:'2026-06-14'},
+  {id:'r3',productId:'p06',name:'Anish M.',rating:5,comment:'Milk was fresh and delivered cold in the morning.',date:'2026-05-28'},
+  {id:'r4',productId:'p24',name:'Puja S.',rating:4,comment:'Good ghee, though the jar could be bigger for the price.',date:'2026-06-20'}
+];
+
+const ORDER_STATUS_FLOW = ['Pending','Confirmed','Packed','Out for Delivery','Delivered'];
+const ADMIN_CREDENTIALS = { email:'admin@taajabazaar.com', password:'admin123' };
+
+/* Demo-only auth: everything below is stored/checked in the browser, in
+   plain view of devtools. Do not reuse this pattern outside a prototype —
+   real customer/admin auth and real payment capture need a server. */
+
+/* ============ STORAGE ============ */
+const KEYS = {
+  products:'tb_products', categories:'tb_categories', users:'tb_users', session:'tb_session',
+  adminSession:'tb_admin_session', cart:'tb_cart', wishlist:'tb_wishlist', orders:'tb_orders',
+  reviews:'tb_reviews', coupons:'tb_coupons', banners:'tb_banners', settings:'tb_settings'
+};
+function load(key, fallback){ try{ const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }catch(e){ return fallback; } }
+function save(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){ console.warn('storage failed', e); } }
+
+const DEFAULT_SETTINGS = {
+  siteName:'Taaja Bazaar', tagline:'Groceries delivered fresh, across the valley.',
+  supportEmail:'support@taajabazaar.com', supportPhone:'+977 9809478706',
+  deliveryFee:80, freeShipThreshold:1500, currency:'Rs.'
+};
+
+/* ============ STATE ============ */
+const state = {
+  route:'home', routeParam:null,
+  filter:'All', searchQuery:'',
+  products: load(KEYS.products, DEFAULT_PRODUCTS.map(p=>({...p}))),
+  users: load(KEYS.users, []),
+  currentUser: load(KEYS.session, null),
+  isAdmin: load(KEYS.adminSession, false),
+  cart: load(KEYS.cart, {}),
+  wishlist: load(KEYS.wishlist, []),
+  orders: load(KEYS.orders, []),
+  reviews: load(KEYS.reviews, DEFAULT_REVIEWS.map(r=>({...r}))),
+  coupons: load(KEYS.coupons, DEFAULT_COUPONS.map(c=>({...c}))),
+  banners: load(KEYS.banners, DEFAULT_BANNERS.map(b=>({...b}))),
+  settings: load(KEYS.settings, {...DEFAULT_SETTINGS}),
+  authMode:'login', authError:'',
+  adminError:'', editingId:null, editingEntity:null,
+  heroSlide:0,
+  appliedCoupon: null,
+  pendingPaymentMethod:null,
+  pendingCheckout:null,
+  lastOrderId:null,
+  toast:null
+};
+
+function money(n){ return state.settings.currency + ' ' + Number(n).toLocaleString('en-IN', {maximumFractionDigits:0}); }
+function findProduct(id){ return state.products.find(p=>p.id===id); }
+function cartCount(){ return Object.values(state.cart).reduce((a,b)=>a+b,0); }
+function cartSubtotal(){ return Object.entries(state.cart).reduce((sum,[id,qty])=>{ const p=findProduct(id); return sum + (p? p.price*qty:0); },0); }
+function couponDiscount(subtotal){
+  if(!state.appliedCoupon) return 0;
+  const c = state.appliedCoupon;
+  if(subtotal < c.minOrder) return 0;
+  return c.type==='percent' ? Math.round(subtotal * c.value/100) : Math.min(c.value, subtotal);
+}
+function orderNumber(){ return 'TB' + Math.floor(100000 + Math.random()*900000); }
+function txnId(prefix){ return prefix + '-' + Date.now().toString().slice(-9); }
+function showToast(msg){ state.toast = msg; render(); setTimeout(()=>{ state.toast=null; const t=document.querySelector('.save-toast'); if(t) t.remove(); }, 2400); }
+
+function setQty(id, qty){
+  if(qty<=0) delete state.cart[id]; else state.cart[id]=qty;
+  save(KEYS.cart, state.cart); render();
+}
+function addToCart(id){ setQty(id, (state.cart[id]||0)+1); }
+function toggleWishlist(id){
+  const idx = state.wishlist.indexOf(id);
+  if(idx>=0) state.wishlist.splice(idx,1); else state.wishlist.push(id);
+  save(KEYS.wishlist, state.wishlist); render();
+}
+
+function navigate(route, param){
+  state.route = route; state.routeParam = param;
+  window.scrollTo({top:0, behavior:'auto'});
+  render();
+}
+
+/* ======================================================================
+   SHARED CHROME (customer)
+   ====================================================================== */
+function headerHTML(){
+  const link = (route,label,ic)=>`<a href="#" data-nav="${route}" class="${state.route===route?'active':''}">${ic?icon(ic):''}${label}</a>`;
+  const accountLabel = state.currentUser ? `Hi, ${state.currentUser.name.split(' ')[0]}` : 'Login';
+  return `
+  <div class="topbar">
+    <div class="wrap">
+      <span>Delivering across Kathmandu Valley · Same-day slots available</span>
+      <span>Pay with eSewa or Khalti · <a href="#" data-nav="contact">Need help?</a></span>
+    </div>
+  </div>
+  <header class="site">
+    <div class="wrap nav-row">
+      <a href="#" data-nav="home" class="brand">
+        <span class="brand-mark">TB</span>
+        <span>
+          <span class="brand-name">${state.settings.siteName}</span>
+          <div class="brand-tag">Fresh off the bazaar</div>
+        </span>
+      </a>
+      <form id="header-search-form" class="search-form">
+        <input type="text" name="q" placeholder="Search rice, ghee, vegetables..." value="${state.route==='search' ? escapeHtml(state.searchQuery) : ''}">
+        <button type="submit" aria-label="Search">${icon('search')}</button>
+      </form>
+      <nav class="links">
+        ${link('products','Shop')}
+        ${link('categories','Categories')}
+        ${link('orders','Orders')}
+        <a href="#" data-nav="wishlist" class="icon-btn-nav">${icon('heart')}${state.wishlist.length? `<span class="badge-count">${state.wishlist.length}</span>`:''}</a>
+        ${link('account', accountLabel,'user')}
+      </nav>
+      <a href="#" data-nav="cart" class="cart-btn icon-btn-nav btn btn-primary btn-sm">
+        ${icon('cart')} Basket ${cartCount()? `<span class="badge-count">${cartCount()}</span>`:''}
+      </a>
+    </div>
+  </header>
+  <div class="cat-strip">
+    <div class="wrap">
+      ${CATEGORIES.map(c=>`<a href="#" data-catnav="${c.id}">${c.name}</a>`).join('')}
+    </div>
+  </div>`;
+}
+
+function footerHTML(){
+  return `
+  <footer class="site">
+    <div class="wrap footer-inner">
+      <div>
+        <h3>${state.settings.siteName}</h3>
+        <p>${state.settings.tagline} We work directly with local growers, mills and kirana suppliers so your order is packed the same day it ships.</p>
+        <div class="pay-badges" style="margin-top:14px;">
+          <span>eSewa</span><span>Khalti</span>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <a href="#" data-nav="products">All products</a>
+          <a href="#" data-nav="categories">Categories</a>
+          <a href="#" data-nav="wishlist">Wishlist</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="#" data-nav="contact">Contact us</a>
+          <a href="#" data-nav="faq">FAQ</a>
+          <a href="#" data-nav="orders">Track an order</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#" data-nav="about">About us</a>
+          <a href="#" data-nav="${state.isAdmin ? 'admin-dashboard' : 'admin-login'}">Admin</a>
+        </div>
+      </div>
+    </div>
+    <div class="wrap footer-bottom">
+      <span>© 2026 ${state.settings.siteName}. A demo storefront — no real orders or payments are processed by kiran bhatta.</span>
+      <span class="mono">${state.settings.supportEmail}</span>
+    </div>
+  </footer>`;
+}
+
+function escapeHtml(s){ return String(s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ======================================================================
+   PRODUCT CARD
+   ====================================================================== */
+function productCard(p){
+  const qty = state.cart[p.id] || 0;
+  const wished = state.wishlist.includes(p.id);
+  const onSale = p.mrp && p.mrp > p.price;
+  return `
+  <div class="card">
+    <div class="card-top">
+      <span class="card-tag ${onSale?'sale':''}">${onSale ? 'Sale' : p.tag}</span>
+      <button class="wish-btn ${wished?'active':''}" data-wish="${p.id}" aria-label="Toggle wishlist for ${p.name}">${icon(wished?'heartFill':'heart')}</button>
+    </div>
+    <div class="card-icon" style="color:var(--teal)" data-open="${p.id}">${icon(p.icon)}</div>
+    <div class="card-body">
+      <h3 data-open="${p.id}">${p.name}</h3>
+      <div class="card-unit">${p.unit}</div>
+      <div>${starRow(p.rating)}<span class="count">(${p.reviews})</span></div>
+      ${p.stock<=5 ? `<div class="stock-low">Only ${p.stock} left</div>` : ''}
+      <div class="card-price-row">
+        <span>${onSale? `<span class="price-old">${money(p.mrp)}</span>`:''}<span class="price">${money(p.price)}</span></span>
+        ${qty===0
+          ? `<button class="add-btn" data-add="${p.id}">Add</button>`
+          : `<div class="stepper"><button data-dec="${p.id}" aria-label="Remove one">–</button><span class="qty">${qty}</span><button data-inc="${p.id}" aria-label="Add one more">+</button></div>`
+        }
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ======================================================================
+   PAGE: HOME
+   ====================================================================== */
+function pageHome(){
+  const featured = state.products.slice(0,8);
+  const ticker = state.products.slice(0,20).map(p=>`<span>${p.name} · ${money(p.price)}</span>`).join('');
+  const banner = state.banners[state.heroSlide % state.banners.length] || state.banners[0];
+  const themeColor = banner.theme==='marigold' ? 'var(--marigold)' : banner.theme==='brick' ? 'var(--brick)' : 'var(--teal)';
+  return `
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <span class="eyebrow on-dark">${banner.title}</span>
+        <h1 style="margin-top:10px;">${banner.subtitle}</h1>
+        <p class="lede">Order rice, vegetables, spices and daily essentials from ${state.settings.siteName} — packed this morning, delivered to your door across the valley today.</p>
+        <div class="hero-actions">
+          <a href="#" data-nav="products" class="btn btn-primary">Shop today's harvest</a>
+          <a href="#" data-nav="categories" class="btn btn-outline" style="border-color:#fff;color:#fff;">Browse categories</a>
+        </div>
+        <div class="hero-dots">
+          ${state.banners.map((b,i)=>`<button data-hero="${i}" class="${i===state.heroSlide%state.banners.length?'active':''}" aria-label="Slide ${i+1}"></button>`).join('')}
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card c1" style="border-top:4px solid ${themeColor}">
+          <div class="eyebrow" style="color:${themeColor}">Today's basket</div>
+          ${state.products.slice(0,3).map(p=>`<div class="r"><span>${p.name}</span><b>${money(p.price)}</b></div>`).join('')}
+        </div>
+        <div class="hero-card c2" style="border-top:4px solid var(--teal)">
+          <div class="eyebrow" style="color:var(--teal)">Pay with</div>
+          <div class="r"><span>eSewa &amp; Khalti</span><b>Cashless</b></div>
+          <div class="r"><span>Free delivery over</span><b>${money(state.settings.freeShipThreshold)}</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker-wrap"><div class="ticker">${ticker}${ticker}</div></div>
+
+  <section class="wrap cat-section">
+    <div class="cat-heading">
+      <div><span class="eyebrow">Browse by aisle</span><h2 style="font-size:26px;margin-top:6px;">What are you cooking?</h2></div>
+    </div>
+    <div class="cat-grid">
+      ${CATEGORIES.map(c=>`<button class="cat-tile" data-catnav="${c.id}">${icon(c.icon)}${c.name}</button>`).join('')}
+    </div>
+  </section>
+
+  <section class="wrap" style="margin-top:8px;">
+    <div class="section-title-row">
+      <div><span class="eyebrow">Fresh in today</span><h2 style="font-size:26px;margin-top:6px;">Staff picks</h2></div>
+      <a href="#" data-nav="products" class="btn btn-outline btn-sm">View all products</a>
+    </div>
+    <div class="grid">${featured.map(productCard).join('')}</div>
+  </section>
+  `;
+}
+
+/* ======================================================================
+   PAGE: PRODUCTS / CATEGORIES / SEARCH
+   ====================================================================== */
+function pageProducts(){
+  const list = state.filter==='All' ? state.products : state.products.filter(p=>p.cat===state.filter);
+  const catName = state.filter==='All' ? 'All products' : (CATEGORIES.find(c=>c.id===state.filter)||{}).name;
+  return `
+  <section class="wrap page-head">
+    <span class="eyebrow">The full aisle</span>
+    <h1>${catName}</h1>
+    <p>Everything below ships from a verified local supplier. Filter by aisle to narrow things down.</p>
+  </section>
+  <section class="wrap">
+    <div class="chip-row">
+      <button class="chip ${state.filter==='All'?'active':''}" data-filter="All">All</button>
+      ${CATEGORIES.map(c=>`<button class="chip ${state.filter===c.id?'active':''}" data-filter="${c.id}">${c.name}</button>`).join('')}
+    </div>
+    ${list.length ? `<div class="grid">${list.map(productCard).join('')}</div>` : `<div class="empty-state"><p>No products in this aisle yet.</p></div>`}
+  </section>`;
+}
+
+function pageCategories(){
+  return `
+  <section class="wrap page-head">
+    <span class="eyebrow">Every aisle</span>
+    <h1>Shop by category</h1>
+    <p>Twelve aisles, stocked daily — pick one to see what's fresh.</p>
+  </section>
+  <section class="wrap cat-section" style="padding-top:20px;">
+    <div class="cat-grid">
+      ${CATEGORIES.map(c=>{
+        const n = state.products.filter(p=>p.cat===c.id).length;
+        return `<button class="cat-tile" data-catnav="${c.id}">${icon(c.icon)}${c.name}<span class="mono" style="color:var(--ink-soft);font-size:11px;">${n} items</span></button>`;
+      }).join('')}
+    </div>
+  </section>`;
+}
+
+function pageSearch(){
+  const q = state.searchQuery.trim().toLowerCase();
+  const list = q ? state.products.filter(p=>p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q)) : [];
+  return `
+  <section class="wrap page-head">
+    <span class="eyebrow">Search</span>
+    <h1>${q ? `Results for "${escapeHtml(state.searchQuery)}"` : 'Search products'}</h1>
+    <p>${q ? `${list.length} item${list.length===1?'':'s'} found.` : 'Try “rice”, “ghee”, or a category name.'}</p>
+  </section>
+  <section class="wrap">
+    ${q && list.length===0 ? `<div class="empty-state"><p>No matches — try a different word, or browse categories instead.</p><a href="#" data-nav="categories" class="btn btn-primary">Browse categories</a></div>` : ''}
+    ${list.length ? `<div class="grid">${list.map(productCard).join('')}</div>` : ''}
+  </section>`;
+}
+
+/* ======================================================================
+   PAGE: PRODUCT DETAILS
+   ====================================================================== */
+function pageProductDetails(id){
+  const p = findProduct(id);
+  if(!p){ return `<section class="wrap page-head"><h1>Product not found</h1><a href="#" data-nav="products" class="btn btn-primary">Back to shop</a></section>`; }
+  const qty = state.cart[p.id] || 0;
+  const wished = state.wishlist.includes(p.id);
+  const onSale = p.mrp && p.mrp > p.price;
+  const productReviews = state.reviews.filter(r=>r.productId===p.id);
+  const related = state.products.filter(r=>r.cat===p.cat && r.id!==p.id).slice(0,4);
+  return `
+  <section class="wrap" style="padding-top:30px;">
+    <div class="pd-layout">
+      <div>
+        <div class="pd-visual">${icon(p.icon)}</div>
+      </div>
+      <div>
+        <span class="eyebrow">${(CATEGORIES.find(c=>c.id===p.cat)||{}).name}</span>
+        <h1 style="margin-top:8px;font-size:28px;">${p.name}</h1>
+        <div style="margin-top:8px;">${starRow(p.rating)}<span class="count">${p.rating.toFixed(1)} · ${productReviews.length} review${productReviews.length===1?'':'s'}</span></div>
+        <div class="pd-price-row">
+          ${onSale? `<span class="price-old" style="font-size:16px;">${money(p.mrp)}</span>`:''}
+          <span class="price">${money(p.price)}</span>
+          <span class="card-unit">${p.unit}</span>
+        </div>
+        ${p.stock<=5 ? `<div class="stock-low">Only ${p.stock} left in stock</div>` : `<div class="mono" style="font-size:12px;color:var(--teal);">In stock — ${p.stock} available</div>`}
+        <p style="color:var(--ink-soft);font-size:14.5px;line-height:1.6;margin-top:14px;">Sourced fresh for ${state.settings.siteName} and quality-checked before packing. Delivered same-day within Kathmandu Valley on orders placed before 4pm.</p>
+        <div class="qty-row">
+          <div class="stepper" style="background:var(--surface);border:1px solid var(--line);">
+            <button data-dec="${p.id}" aria-label="Decrease">–</button><span class="qty">${qty||1}</span><button data-inc-safe="${p.id}" aria-label="Increase">+</button>
+          </div>
+          <button class="btn btn-primary" data-add="${p.id}">Add to basket</button>
+          <button class="wish-btn ${wished?'active':''}" data-wish="${p.id}" style="width:42px;height:42px;background:var(--surface);border:1px solid var(--line);" aria-label="Toggle wishlist">${icon(wished?'heartFill':'heart')}</button>
+        </div>
+        <div class="receipt" style="--tooth:0;clip-path:none;padding:14px 16px;">
+          <div class="receipt-line"><span>eSewa</span><span>Accepted</span></div>
+          <div class="receipt-line"><span>Khalti</span><span>Accepted</span></div>
+          <div class="receipt-line"><span>Free delivery over</span><span>${money(state.settings.freeShipThreshold)}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title-row"><h2 style="font-size:22px;">Customer reviews</h2></div>
+    <div style="max-width:640px;">
+      ${productReviews.length ? productReviews.map(r=>`
+        <div class="review-item">
+          <span class="who">${escapeHtml(r.name)}</span><span class="when">${r.date}</span>
+          <div>${starRow(r.rating)}</div>
+          <p>${escapeHtml(r.comment)}</p>
+        </div>`).join('') : `<p style="color:var(--ink-soft);">No reviews yet — be the first to review this product.</p>`}
+      <form id="review-form" data-product="${p.id}" style="margin-top:20px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px;">
+        <div class="field-row">
+          <div><label for="rev-name">Your name</label><input id="rev-name" name="name" type="text" placeholder="Your name" value="${state.currentUser? state.currentUser.name:''}"></div>
+          <div><label for="rev-rating">Rating</label>
+            <select id="rev-rating" name="rating"><option value="5">5 — Excellent</option><option value="4">4 — Good</option><option value="3">3 — Average</option><option value="2">2 — Poor</option><option value="1">1 — Bad</option></select>
+          </div>
+        </div>
+        <label for="rev-comment">Comment</label>
+        <textarea id="rev-comment" name="comment" placeholder="What did you think of this product?"></textarea>
+        <button type="submit" class="btn btn-dark btn-sm" style="margin-top:12px;">Submit review</button>
+      </form>
+    </div>
+
+    ${related.length? `
+    <div class="section-title-row"><h2 style="font-size:22px;">You may also like</h2></div>
+    <div class="grid">${related.map(productCard).join('')}</div>` : ''}
+  </section>`;
+}
+
+/* ======================================================================
+   PAGE: CART
+   ====================================================================== */
+function pageCart(){
+  const ids = Object.keys(state.cart);
+  if(ids.length===0){
+    return `<section class="wrap"><div class="empty-state">${icon('emptyCart')}<h2 style="font-size:22px;">Your basket is empty</h2><p>Nothing added yet — the aisles are stocked and waiting.</p><a href="#" data-nav="products" class="btn btn-primary">Start shopping</a></div></section>`;
+  }
+  const subtotal = cartSubtotal();
+  const discount = couponDiscount(subtotal);
+  const shipping = (subtotal - discount) >= state.settings.freeShipThreshold ? 0 : state.settings.deliveryFee;
+  const total = subtotal - discount + shipping;
+  const remaining = state.settings.freeShipThreshold - (subtotal - discount);
+
+  const rows = ids.map(id=>{
+    const p = findProduct(id); if(!p) return '';
+    const qty = state.cart[id];
+    return `
+    <div class="cart-row">
+      <div class="card-icon" style="color:var(--teal)">${icon(p.icon)}</div>
+      <div class="cart-row-name"><h3>${p.name}</h3><div class="card-unit">${p.unit} · ${money(p.price)} each</div><button class="remove-btn" data-remove="${id}">Remove</button></div>
+      <div class="stepper"><button data-dec="${id}" aria-label="Remove one">–</button><span class="qty">${qty}</span><button data-inc="${id}" aria-label="Add one more">+</button></div>
+      <div class="line-total mono">${money(p.price*qty)}</div>
+    </div>`;
+  }).join('');
+
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Your basket</span><h1>Ready when you are</h1></section>
+  <section class="wrap cart-layout">
+    <div class="cart-list">${rows}</div>
+    <div class="receipt">
+      <div class="receipt-head"><span class="mono">Order summary</span></div>
+      <div class="receipt-line"><span>Subtotal</span><span>${money(subtotal)}</span></div>
+      ${state.appliedCoupon ? `<div class="receipt-line"><span>Coupon ${state.appliedCoupon.code}</span><span>-${money(discount)}</span></div>` : ''}
+      <div class="receipt-line"><span>Delivery</span><span>${shipping===0?'Free':money(shipping)}</span></div>
+      <div class="coupon-row">
+        <input type="text" id="coupon-input" placeholder="Coupon code" value="${state.appliedCoupon? state.appliedCoupon.code:''}">
+        <button class="btn btn-outline btn-sm" id="apply-coupon-btn" type="button">Apply</button>
+      </div>
+      ${remaining>0 ? `<div class="coupon-note">Add ${money(remaining)} more for free delivery.</div>` : `<div class="coupon-note">Your delivery is free.</div>`}
+      <div class="receipt-line total"><span>Total</span><span>${money(total)}</span></div>
+      <a href="#" data-nav="checkout" class="btn btn-primary btn-block" style="margin-top:16px;">Proceed to checkout</a>
+    </div>
+  </section>`;
+}
+
+/* ======================================================================
+   PAGE: CHECKOUT
+   ====================================================================== */
+function pageCheckout(){
+  const ids = Object.keys(state.cart);
+  if(ids.length===0){ navigate('cart'); return ''; }
+  const subtotal = cartSubtotal();
+  const discount = couponDiscount(subtotal);
+  const shipping = (subtotal-discount) >= state.settings.freeShipThreshold ? 0 : state.settings.deliveryFee;
+  const total = subtotal - discount + shipping;
+  const miniRows = ids.map(id=>{ const p=findProduct(id); if(!p) return ''; const qty=state.cart[id]; return `<div class="receipt-line"><span>${qty} × ${p.name}</span><span>${money(p.price*qty)}</span></div>`; }).join('');
+  const u = state.currentUser;
+
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Checkout</span><h1>Where should it go?</h1></section>
+  <section class="wrap checkout-layout">
+    <form id="checkout-form" novalidate>
+      <fieldset>
+        <legend>Contact</legend>
+        <div class="field-row">
+          <div class="field" data-field="fullName"><label for="fullName">Full name</label><input id="fullName" name="fullName" type="text" placeholder="Sunita Shrestha" value="${u?u.name:''}"><div class="error-text">Enter your full name.</div></div>
+          <div class="field" data-field="email"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@example.com" value="${u?u.email:''}"><div class="error-text">Enter a valid email.</div></div>
+        </div>
+        <div class="field-row single">
+          <div class="field" data-field="phone"><label for="phone">Phone number</label><input id="phone" name="phone" type="tel" placeholder="98XXXXXXXX"><div class="error-text">Enter a phone number.</div></div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Delivery address</legend>
+        <div class="field-row single"><div class="field" data-field="address"><label for="address">Street address</label><input id="address" name="address" type="text" placeholder="House 12, Jhamsikhel Road"><div class="error-text">Enter a delivery address.</div></div></div>
+        <div class="field-row">
+          <div class="field" data-field="city"><label for="city">City</label><input id="city" name="city" type="text" placeholder="Kathmandu"><div class="error-text">Enter a city.</div></div>
+          <div class="field" data-field="zip"><label for="zip">Postal code</label><input id="zip" name="zip" type="text" placeholder="44600"><div class="error-text">Enter a postal code.</div></div>
+        </div>
+        <div class="field-row single">
+          <div class="field" data-field="window"><label for="window">Delivery window</label>
+            <select id="window" name="window">
+              <option value="">Choose a time</option>
+              <option>Today, 4 – 6pm</option><option>Today, 6 – 8pm</option>
+              <option>Tomorrow, 8 – 10am</option><option>Tomorrow, 10am – 12pm</option>
+            </select>
+            <div class="error-text">Pick a delivery window.</div>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Payment method</legend>
+        <div class="pay-options">
+          <button type="button" class="pay-opt" data-paymethod="esewa"><span class="swatch esewa">eSewa</span><span class="meta"><strong>eSewa</strong><span>Pay in NPR · demo redirect</span></span></button>
+          <button type="button" class="pay-opt" data-paymethod="khalti"><span class="swatch khalti">Khalti</span><span class="meta"><strong>Khalti</strong><span>Pay in NPR · demo checkout</span></span></button>
+        </div>
+        <input type="hidden" id="paymentMethod" name="paymentMethod" value="">
+        <div class="field" data-field="paymentMethod"><div class="error-text">Choose a payment method.</div></div>
+        <p style="font-size:12px;color:var(--ink-soft);">This is a demo store — no real gateway is contacted and no money moves.</p>
+      </fieldset>
+      <button type="submit" class="btn btn-primary btn-block">Continue to payment · ${money(total)}</button>
+    </form>
+    <div class="receipt">
+      <div class="receipt-head"><span class="mono">Order summary</span></div>
+      ${miniRows}
+      <div class="receipt-divider"></div>
+      <div class="receipt-line"><span>Subtotal</span><span>${money(subtotal)}</span></div>
+      ${state.appliedCoupon? `<div class="receipt-line"><span>Coupon ${state.appliedCoupon.code}</span><span>-${money(discount)}</span></div>`:''}
+      <div class="receipt-line"><span>Delivery</span><span>${shipping===0?'Free':money(shipping)}</span></div>
+      <div class="receipt-line total"><span>Total</span><span>${money(total)}</span></div>
+    </div>
+  </section>`;
+}
+
+/* ======================================================================
+   PAGE: PAYMENT GATEWAY SIMULATION
+   ====================================================================== */
+function pagePaymentGateway(){
+  const method = state.pendingPaymentMethod;
+  const co = state.pendingCheckout;
+  if(!co || !method){ navigate('checkout'); return ''; }
+  const label = method==='esewa' ? 'eSewa' : 'Khalti';
+  return `
+  <section class="wrap">
+    <div class="gateway-screen">
+      <div class="gateway-head ${method}"><div class="mono">Demo Payment Gateway</div><h2>${label} Checkout</h2></div>
+      <div class="gateway-body">
+        <div class="gateway-spinner"></div>
+        <p style="color:var(--ink-soft);font-size:14px;">Redirecting to ${label} to confirm your payment...</p>
+        <div class="amt">${money(co.total)}</div>
+        <button class="btn btn-primary btn-block" id="simulate-pay-btn">Simulate successful payment</button>
+        <button class="btn btn-outline btn-block" id="simulate-cancel-btn" style="margin-top:10px;">Cancel and go back</button>
+        <div class="gateway-disclaimer">Simulated for this prototype — no real ${label} account is contacted and no funds move. In production this screen would be replaced by ${label}'s hosted checkout.</div>
+      </div>
+    </div>
+  </section>`;
+}
+
+/* ======================================================================
+   PAGE: ORDER SUCCESS
+   ====================================================================== */
+function pageOrderSuccess(){
+  const o = state.orders.find(o=>o.id===state.lastOrderId);
+  if(!o){ navigate('home'); return ''; }
+  return `
+  <section class="wrap confirm">
+    <div class="confirm-badge">${icon('check')}</div>
+    <h1>Thanks, ${o.name.split(' ')[0]} — it's on its way.</h1>
+    <p>We're packing your order now for delivery ${o.window.toLowerCase()}.</p>
+  </section>
+  <section class="wrap" style="max-width:440px;">
+    <div class="receipt">
+      <div class="receipt-head"><span class="mono">Order #${o.number}</span></div>
+      ${o.items.map(i=>`<div class="receipt-line"><span>${i.qty} × ${i.name}</span><span>${money(i.price*i.qty)}</span></div>`).join('')}
+      <div class="receipt-divider"></div>
+      <div class="receipt-line"><span>Paid via</span><span>${o.paymentMethod==='esewa'?'eSewa':'Khalti'}</span></div>
+      <div class="receipt-line"><span>Transaction ID</span><span>${o.transactionId}</span></div>
+      <div class="receipt-line total"><span>Total paid</span><span>${money(o.total)}</span></div>
+    </div>
+    <div style="text-align:center;margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="#" data-nav="order-track" data-navparam="${o.id}" class="btn btn-dark">Track this order</a>
+      <a href="#" data-nav="home" class="btn btn-outline">Continue shopping</a>
+    </div>
+  </section>`;
+}
+
+/* ======================================================================
+   PAGE: ORDERS (history) + ORDER TRACKING
+   ====================================================================== */
+function visibleOrders(){
+  return state.currentUser ? state.orders.filter(o=>o.customerEmail===state.currentUser.email) : state.orders.filter(o=>!o.customerEmail);
+}
+function pageOrders(){
+  const orders = visibleOrders();
+  if(orders.length===0){
+    return `<section class="wrap"><div class="empty-state">${icon('emptyCart')}<h2 style="font-size:22px;">No orders yet</h2><p>${state.currentUser ? 'Orders placed while signed in show up here.' : 'Orders are saved to this browser — sign in to keep a running history tied to your account.'}</p><a href="#" data-nav="products" class="btn btn-primary">Start shopping</a></div></section>`;
+  }
+  const rows = orders.map(o=>{
+    const d = new Date(o.placedAt);
+    return `
+    <div class="receipt" style="margin-bottom:22px;">
+      <div class="receipt-head" style="display:flex;justify-content:space-between;align-items:baseline;text-align:left;">
+        <span class="mono">Order #${o.number}</span>
+        <span class="status-pill ${o.status.replace(/ /g,'-')}">${o.status}</span>
+      </div>
+      <div style="font-size:12.5px;color:var(--ink-soft);margin-bottom:8px;">${d.toLocaleDateString()} · Window: ${o.window}</div>
+      ${o.items.map(i=>`<div class="receipt-line"><span>${i.qty} × ${i.name}</span><span>${money(i.price*i.qty)}</span></div>`).join('')}
+      <div class="receipt-line total"><span>Total</span><span>${money(o.total)}</span></div>
+      <div style="text-align:right;margin-top:10px;"><a href="#" data-nav="order-track" data-navparam="${o.id}" class="btn btn-outline btn-sm">Track order</a></div>
+    </div>`;
+  }).join('');
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Saved in this browser</span><h1>Your orders</h1><p>Stored locally on this device — clearing browser data will remove them.</p></section>
+  <section class="wrap" style="max-width:640px;margin-top:20px;">${rows}</section>`;
+}
+
+function pageOrderTrack(orderId){
+  const o = state.orders.find(o=>o.id===orderId) || visibleOrders()[0];
+  if(!o){ return `<section class="wrap page-head"><h1>No orders to track</h1><a href="#" data-nav="products" class="btn btn-primary">Start shopping</a></section>`; }
+  const currentIdx = ORDER_STATUS_FLOW.indexOf(o.status);
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Order #${o.number}</span><h1>Track your order</h1></section>
+  <section class="wrap" style="max-width:720px;">
+    ${o.status==='Cancelled' ? `<div class="track-cancelled">This order was cancelled. Contact support if you have questions.</div>` : `
+    <div class="track-stepper">
+      ${ORDER_STATUS_FLOW.map((s,i)=>`
+        <div class="track-step ${i<currentIdx?'done':''} ${i===currentIdx?'current':''}">
+          <div class="dot">${i<currentIdx?icon('check'):icon(['box','check','box','truck','check'][i]||'box')}</div>
+          <span class="label">${s}</span>
+        </div>`).join('')}
+    </div>`}
+    <div class="receipt" style="margin-top:30px;">
+      <div class="receipt-head"><span class="mono">Delivery details</span></div>
+      <div class="receipt-line"><span>Delivering to</span><span>${escapeHtml(o.address)}, ${escapeHtml(o.city)}</span></div>
+      <div class="receipt-line"><span>Window</span><span>${o.window}</span></div>
+      <div class="receipt-line"><span>Payment</span><span>${o.paymentMethod==='esewa'?'eSewa':'Khalti'} · ${o.paymentStatus}</span></div>
+      <div class="receipt-divider"></div>
+      ${o.items.map(i=>`<div class="receipt-line"><span>${i.qty} × ${i.name}</span><span>${money(i.price*i.qty)}</span></div>`).join('')}
+      <div class="receipt-line total"><span>Total</span><span>${money(o.total)}</span></div>
+    </div>
+  </section>`;
+}
+
+/* ======================================================================
+   PAGE: WISHLIST
+   ====================================================================== */
+function pageWishlist(){
+  const items = state.wishlist.map(id=>findProduct(id)).filter(Boolean);
+  if(items.length===0){
+    return `<section class="wrap"><div class="empty-state">${icon('emptyHeart')}<h2 style="font-size:22px;">Your wishlist is empty</h2><p>Tap the heart on any product to save it for later.</p><a href="#" data-nav="products" class="btn btn-primary">Browse products</a></div></section>`;
+  }
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Saved for later</span><h1>Your wishlist</h1></section>
+  <section class="wrap"><div class="grid">${items.map(productCard).join('')}</div></section>`;
+}
+
+/* ======================================================================
+   PAGE: ACCOUNT (login/signup) + PROFILE
+   ====================================================================== */
+function pageAccount(){
+  if(state.currentUser){ return pageProfile(); }
+  const isSignup = state.authMode === 'signup';
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Your account</span><h1>${isSignup?'Create an account':'Welcome back'}</h1><p>${isSignup?'Save your delivery details and keep a history of your orders.':'Sign in to reuse your details at checkout and see your order history.'}</p></section>
+  <section class="wrap" style="margin-top:24px;">
+    <div class="auth-card">
+      <div class="auth-toggle"><button data-authmode="login" class="${!isSignup?'active':''}">Log in</button><button data-authmode="signup" class="${isSignup?'active':''}">Sign up</button></div>
+      ${state.authError? `<div class="auth-error">${state.authError}</div>`:''}
+      <form id="auth-form">
+        ${isSignup? `<div style="margin-bottom:14px;"><label for="auth-name">Full name</label><input id="auth-name" name="name" type="text" placeholder="Sunita Shrestha"></div>`:''}
+        <div style="margin-bottom:14px;"><label for="auth-email">Email</label><input id="auth-email" name="email" type="email" placeholder="you@example.com"></div>
+        <div style="margin-bottom:18px;"><label for="auth-password">Password</label><input id="auth-password" name="password" type="password" placeholder="••••••••"></div>
+        <button type="submit" class="btn btn-primary btn-block">${isSignup?'Create account':'Log in'}</button>
+      </form>
+      <p style="font-size:11.5px;color:var(--ink-soft);margin-top:16px;">Demo only — accounts are stored in this browser, not on a secure server.</p>
+    </div>
+  </section>`;
+}
+
+function pageProfile(){
+  const u = state.currentUser;
+  const orders = visibleOrders();
+  const tab = state.routeParam || 'details';
+  return `
+  <section class="wrap page-head"><span class="eyebrow">My account</span><h1>Hi, ${u.name.split(' ')[0]}</h1></section>
+  <section class="wrap profile-grid">
+    <div class="profile-nav">
+      <button data-profiletab="details" class="${tab==='details'?'active':''}">My details</button>
+      <button data-profiletab="address" class="${tab==='address'?'active':''}">Saved address</button>
+      <button data-nav="orders" class="">My orders (${orders.length})</button>
+      <button data-nav="wishlist" class="">My wishlist (${state.wishlist.length})</button>
+      <button id="logout-btn" style="color:var(--brick);margin-top:10px;">Log out</button>
+    </div>
+    <div class="profile-panel">
+      ${tab==='address' ? `
+        <h3 style="font-size:17px;margin-bottom:14px;">Saved delivery address</h3>
+        <form id="profile-address-form">
+          <div class="field-row single"><div><label for="pa-address">Street address</label><input id="pa-address" name="address" type="text" value="${escapeHtml(u.address||'')}" placeholder="House 12, Jhamsikhel Road"></div></div>
+          <div class="field-row">
+            <div><label for="pa-city">City</label><input id="pa-city" name="city" type="text" value="${escapeHtml(u.city||'')}" placeholder="Kathmandu"></div>
+            <div><label for="pa-zip">Postal code</label><input id="pa-zip" name="zip" type="text" value="${escapeHtml(u.zip||'')}" placeholder="44600"></div>
+          </div>
+          <button type="submit" class="btn btn-dark">Save address</button>
+        </form>
+      ` : `
+        <h3 style="font-size:17px;margin-bottom:14px;">My details</h3>
+        <form id="profile-details-form">
+          <div class="field-row">
+            <div><label for="pd-name">Full name</label><input id="pd-name" name="name" type="text" value="${escapeHtml(u.name)}"></div>
+            <div><label for="pd-phone">Phone number</label><input id="pd-phone" name="phone" type="tel" value="${escapeHtml(u.phone||'')}" placeholder="98XXXXXXXX"></div>
+          </div>
+          <div class="field-row single"><div><label for="pd-email">Email</label><input id="pd-email" name="email" type="email" value="${escapeHtml(u.email)}" disabled></div></div>
+          <button type="submit" class="btn btn-dark">Save details</button>
+        </form>
+      `}
+    </div>
+  </section>`;
+}
+
+/* ======================================================================
+   PAGE: CONTACT / ABOUT / FAQ
+   ====================================================================== */
+function pageContact(){
+  return `
+  <section class="wrap page-head"><span class="eyebrow">We're here to help</span><h1>Contact us</h1><p>Questions about an order, a delivery slot, or a payment? Reach out — a real store would route this form to its support team.</p></section>
+  <section class="wrap two-col" style="margin-top:24px;">
+    <form id="contact-form" class="profile-panel">
+      <div class="field-row">
+        <div><label for="c-name">Your name</label><input id="c-name" name="name" type="text" placeholder="Your name" value="${state.currentUser?state.currentUser.name:''}"></div>
+        <div><label for="c-email">Your email</label><input id="c-email" name="email" type="email" placeholder="you@example.com" value="${state.currentUser?state.currentUser.email:''}"></div>
+      </div>
+      <label for="c-message">Message</label>
+      <textarea id="c-message" name="message" placeholder="How can we help?"></textarea>
+      <button type="submit" class="btn btn-primary" style="margin-top:14px;">Send message</button>
+    </form>
+    <div class="receipt">
+      <div class="receipt-head"><span class="mono">Reach us directly</span></div>
+      <div class="receipt-line"><span>${icon('mail')} Email</span><span>${state.settings.supportEmail}</span></div>
+      <div class="receipt-line"><span>${icon('phone')} Phone</span><span>${state.settings.supportPhone}</span></div>
+      <div class="receipt-line"><span>${icon('pin')} Address</span><span>Jhamsikhel, Lalitpur</span></div>
+      <div class="receipt-divider"></div>
+      <div style="font-size:12.5px;color:var(--ink-soft);">Support hours: 7am – 9pm, every day.</div>
+    </div>
+  </section>`;
+}
+
+function pageAbout(){
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Our story</span><h1>About ${state.settings.siteName}</h1></section>
+  <section class="wrap" style="max-width:720px;margin-top:10px;">
+    <p style="color:var(--ink-soft);font-size:15.5px;line-height:1.7;">${state.settings.siteName} started as a single delivery bike doing rounds between local mandis and a handful of neighbourhoods in Kathmandu. Today we work with growers, mills, dairies and kirana suppliers across the valley to bring their stock online, still packed the same day it's picked or milled.</p>
+    <p style="color:var(--ink-soft);font-size:15.5px;line-height:1.7;">Every order can be paid for with eSewa or Khalti, tracked from packing to doorstep, and reviewed once it arrives — so the next customer knows exactly what they're ordering.</p>
+    <div class="stat-grid" style="margin-top:30px;">
+      <div class="stat-card"><div class="lbl">Categories stocked</div><div class="val">${CATEGORIES.length}</div></div>
+      <div class="stat-card"><div class="lbl">Products listed</div><div class="val">${state.products.length}</div></div>
+      <div class="stat-card"><div class="lbl">Delivery areas</div><div class="val">Kathmandu Valley</div></div>
+      <div class="stat-card"><div class="lbl">Payment partners</div><div class="val">eSewa · Khalti</div></div>
+    </div>
+  </section>`;
+}
+
+const FAQ_ITEMS = [
+  {q:'Which payment methods are accepted?', a:'You can pay with eSewa or Khalti at checkout. Both are simulated in this demo — no real transaction is processed.'},
+  {q:'How fast is delivery?', a:'Most orders placed before 4pm are delivered the same evening. You can pick a delivery window at checkout.'},
+  {q:'How do I track my order?', a:'Go to Orders in the top menu, then choose Track order on any order to see its current status.'},
+  {q:'Can I return a product?', a:'If something arrives damaged or incorrect, contact support within 24 hours with your order number and we will arrange a replacement or refund.'},
+  {q:'Do I need an account to order?', a:'No — you can check out as a guest. Creating an account lets you save addresses and see order history automatically.'},
+  {q:'How do coupons work?', a:'Enter a coupon code in your basket before checkout. Each coupon has its own minimum order value and expiry date.'}
+];
+function pageFaq(){
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Good to know</span><h1>Frequently asked questions</h1></section>
+  <section class="wrap" style="max-width:700px;margin-top:10px;">
+    ${FAQ_ITEMS.map((f,i)=>`
+      <div class="faq-item" data-faqidx="${i}">
+        <button class="faq-q">${f.q}<span class="chev">${icon('check')}</span></button>
+        <div class="faq-a">${f.a}</div>
+      </div>`).join('')}
+  </section>`;
+}
+
+/* ======================================================================
+   ADMIN: SHELL
+   ====================================================================== */
+const ADMIN_NAV = [
+  {route:'admin-dashboard', label:'Dashboard'},
+  {route:'admin-categories', label:'Manage Categories'},
+  {route:'admin-products', label:'Manage Products'},
+  {route:'admin-orders', label:'Manage Orders'},
+  {route:'admin-customers', label:'Manage Customers'},
+  {route:'admin-payments', label:'Manage Payments'},
+  {route:'admin-reviews', label:'Manage Reviews'},
+  {route:'admin-coupons', label:'Manage Coupons'},
+  {route:'admin-reports', label:'Sales Reports'},
+  {route:'admin-banners', label:'Banner Management'},
+  {route:'admin-settings', label:'Website Settings'}
+];
+function adminShell(inner){
+  return `
+  <div class="admin-shell">
+    <aside class="admin-side">
+      <div class="brand"><span class="brand-mark">TB</span><span><span class="brand-name" style="font-size:16px;">${state.settings.siteName}</span><div class="brand-tag">Admin panel</div></span></div>
+      <nav>${ADMIN_NAV.map(n=>`<a href="#" data-nav="${n.route}" class="${state.route===n.route?'active':''}">${n.label}</a>`).join('')}</nav>
+      <div class="logout-row"><a href="#" data-nav="home" style="display:block;margin-bottom:6px;">← Back to store</a><button id="admin-logout-btn" class="btn btn-outline btn-sm" style="width:100%;color:#fff;border-color:#3B4C68;">Log out</button></div>
+    </aside>
+    <div class="admin-main">${inner}</div>
+  </div>`;
+}
+
+function pageAdminLogin(){
+  return `
+  <section class="wrap page-head"><span class="eyebrow">Staff only</span><h1>Admin sign in</h1><p>Manage the catalog, orders and settings from here.</p></section>
+  <section class="wrap" style="margin-top:24px;">
+    <div class="auth-card">
+      ${state.adminError? `<div class="auth-error">${state.adminError}</div>`:''}
+      <form id="admin-login-form">
+        <div style="margin-bottom:14px;"><label for="admin-email">Admin email</label><input id="admin-email" name="email" type="email" placeholder="${ADMIN_CREDENTIALS.email}"></div>
+        <div style="margin-bottom:18px;"><label for="admin-password">Password</label><input id="admin-password" name="password" type="password" placeholder="••••••••"></div>
+        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+      </form>
+      <p style="font-size:11.5px;color:var(--ink-soft);margin-top:16px;">Demo credentials: <span class="mono">${ADMIN_CREDENTIALS.email}</span> / <span class="mono">${ADMIN_CREDENTIALS.password}</span></p>
+    </div>
+  </section>`;
+}
+
+/* ---------- admin: dashboard ---------- */
+function pageAdminDashboard(){
+  const totalOrders = state.orders.length;
+  const totalRevenue = state.orders.reduce((s,o)=>s+o.total,0);
+  const pending = state.orders.filter(o=>o.status==='Pending').length;
+  const customers = state.users.length;
+  const byCat = CATEGORIES.map(c=>({name:c.name, count: state.orders.reduce((s,o)=>s+o.items.filter(i=>findProduct(i.id)?.cat===c.id).reduce((a,i)=>a+i.qty,0),0)}));
+  const maxCat = Math.max(1, ...byCat.map(c=>c.count));
+  const recent = [...state.orders].slice(0,6);
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Dashboard</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">${new Date().toLocaleDateString()}</span></div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="lbl">Total revenue</div><div class="val">${money(totalRevenue)}</div><div class="delta">${totalOrders} orders</div></div>
+      <div class="stat-card"><div class="lbl">Pending orders</div><div class="val">${pending}</div><div class="delta">Needs confirmation</div></div>
+      <div class="stat-card"><div class="lbl">Registered customers</div><div class="val">${customers}</div><div class="delta">${state.reviews.length} reviews left</div></div>
+      <div class="stat-card"><div class="lbl">Products listed</div><div class="val">${state.products.length}</div><div class="delta">${CATEGORIES.length} categories</div></div>
+    </div>
+    <div class="two-col">
+      <div class="stat-card">
+        <div class="lbl">Units sold by category</div>
+        <div class="bar-chart">
+          ${byCat.map(c=>`<div class="bar-col"><div class="bar" style="height:${Math.max(4,(c.count/maxCat)*130)}px"></div><div class="bar-lbl">${c.name.split(' ')[0]}</div></div>`).join('')}
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl" style="margin-bottom:10px;">Recent orders</div>
+        ${recent.length? recent.map(o=>`<div class="receipt-line" style="font-family:'Inter';"><span>#${o.number}</span><span class="status-pill ${o.status.replace(/ /g,'-')}">${o.status}</span></div>`).join('') : '<p style="color:var(--ink-soft);font-size:13px;">No orders placed yet.</p>'}
+      </div>
+    </div>
+  `);
+}
+
+/* ---------- admin: generic simple CRUD table builder ---------- */
+function adminEditableRow(entity, id, fields, extraCell){
+  return `<tr data-editrow="${id}">
+    ${fields.map(f=>`<td>${f.type==='select' ? `<select data-edit="${f.key}">${f.options.map(o=>`<option value="${o.value}" ${o.value===f.value?'selected':''}>${o.label}</option>`).join('')}</select>` : `<input type="${f.type||'text'}" ${f.step?`step="${f.step}"`:''} data-edit="${f.key}" value="${f.value}" style="${f.width?`width:${f.width}px;`:''}">`}</td>`).join('')}
+    <td class="admin-actions"><button class="icon-btn save" data-save="${entity}:${id}">Save</button><button class="icon-btn delete" data-delete="${entity}:${id}">Delete</button></td>
+  </tr>`;
+}
+
+/* ---------- admin: manage categories ---------- */
+function pageAdminCategories(){
+  const rows = CATEGORIES.map(c=>{
+    const count = state.products.filter(p=>p.cat===c.id).length;
+    const editing = state.editingEntity==='categories' && state.editingId===c.id;
+    if(editing){
+      return `<tr data-editrow="${c.id}">
+        <td>${icon(c.icon)}</td>
+        <td><input type="text" data-edit="name" value="${c.name}" style="width:200px;"></td>
+        <td class="mono">${c.id}</td>
+        <td>${count} products</td>
+        <td class="admin-actions"><button class="icon-btn save" data-save="categories:${c.id}">Save</button></td>
+      </tr>`;
+    }
+    return `<tr><td>${icon(c.icon)}</td><td>${c.name}</td><td class="mono">${c.id}</td><td>${count} products</td>
+      <td class="admin-actions"><button class="icon-btn edit" data-edit-row="categories:${c.id}">Rename</button></td></tr>`;
+  }).join('');
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Manage categories</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">${CATEGORIES.length} categories</span></div>
+    <p style="color:var(--ink-soft);font-size:13.5px;margin-bottom:16px;">Categories map to the site's aisles. Renaming updates the label shown to customers; the underlying id used by products stays the same.</p>
+    <table class="admin-table"><thead><tr><th></th><th>Name</th><th>ID</th><th>Products</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>
+  `);
+}
+
+/* ---------- admin: manage products ---------- */
+function pageAdminProducts(){
+  const rows = state.products.map(p=>{
+    const editing = state.editingEntity==='products' && state.editingId===p.id;
+    if(editing){
+      return adminEditableRow('products', p.id, [
+        {key:'name', value:p.name, width:150},
+        {key:'cat', type:'select', value:p.cat, options:CATEGORIES.map(c=>({value:c.id,label:c.name}))},
+        {key:'unit', value:p.unit, width:80},
+        {key:'price', type:'number', step:'0.01', value:p.price, width:70},
+        {key:'stock', type:'number', value:p.stock, width:60},
+        {key:'tag', value:p.tag, width:110}
+      ]);
+    }
+    return `<tr>
+      <td>${p.name}</td><td>${(CATEGORIES.find(c=>c.id===p.cat)||{}).name}</td><td>${p.unit}</td>
+      <td class="mono">${money(p.price)}</td><td>${p.stock}</td><td>${p.tag}</td>
+      <td class="admin-actions"><button class="icon-btn edit" data-edit-row="products:${p.id}">Edit</button><button class="icon-btn delete" data-delete="products:${p.id}">Delete</button></td>
+    </tr>`;
+  }).join('');
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Manage products</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">${state.products.length} products</span></div>
+    <div class="add-card">
+      <h3 style="font-size:15px;margin-bottom:14px;">Add a product</h3>
+      <form id="add-product-form">
+        <div class="add-grid">
+          <div><label>Name</label><input name="name" type="text" placeholder="Sun Gold Cherry Tomatoes" required></div>
+          <div><label>Category</label><select name="cat">${CATEGORIES.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select></div>
+          <div><label>Icon</label><select name="icon">${Object.keys(ICONS).filter(k=>!['cart','heart','heartFill','user','search','truck','check','box','emptyCart','emptyHeart','pin','mail','phone','star'].includes(k)).map(k=>`<option value="${k}">${k}</option>`).join('')}</select></div>
+          <div><label>Unit</label><input name="unit" type="text" placeholder="per kg" required></div>
+          <div><label>Price (NPR)</label><input name="price" type="number" step="0.01" min="0" placeholder="150" required></div>
+          <div><label>Stock</label><input name="stock" type="number" min="0" placeholder="20" required></div>
+          <div><label>Tag</label><input name="tag" type="text" placeholder="Just picked" required></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:14px;">Add to catalog</button>
+      </form>
+    </div>
+    <table class="admin-table"><thead><tr><th>Name</th><th>Category</th><th>Unit</th><th>Price</th><th>Stock</th><th>Tag</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>
+  `);
+}
+
+/* ---------- admin: manage orders ---------- */
+function pageAdminOrders(){
+  const rows = state.orders.map(o=>{
+    return `<tr>
+      <td class="mono">${o.number}</td><td>${o.name}</td><td>${new Date(o.placedAt).toLocaleDateString()}</td>
+      <td class="mono">${money(o.total)}</td><td>${o.paymentMethod==='esewa'?'eSewa':'Khalti'}</td>
+      <td>
+        <select data-orderstatus="${o.id}" ${o.status==='Cancelled'?'disabled':''}>
+          ${ORDER_STATUS_FLOW.map(s=>`<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('')}
+          <option value="Cancelled" ${o.status==='Cancelled'?'selected':''}>Cancelled</option>
+        </select>
+      </td>
+      <td class="admin-actions"><button class="icon-btn delete" data-delete="orders:${o.id}">Delete</button></td>
+    </tr>`;
+  }).join('');
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Manage orders</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">${state.orders.length} orders</span></div>
+    ${state.orders.length ? `<table class="admin-table"><thead><tr><th>Order #</th><th>Customer</th><th>Date</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>` : `<p style="color:var(--ink-soft);">No orders yet.</p>`}
+  `);
+}
+
+/* ---------- admin: manage customers ---------- */
+function pageAdminCustomers(){
+  const rows = state.users.map(u=>{
+    const orderCount = state.orders.filter(o=>o.customerEmail===u.email).length;
+    return `<tr><td>${escapeHtml(u.name)}</td><td>${escapeHtml(u.email)}</td><td>${orderCount}</td>
+      <td class="admin-actions"><button class="icon-btn delete" data-delete="users:${u.email}">Remove</button></td></tr>`;
+  }).join('');
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Manage customers</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">${state.users.length} registered</span></div>
+    ${state.users.length ? `<table class="admin-table"><thead><tr><th>Name</th><th>Email</th><th>Orders</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>` : `<p style="color:var(--ink-soft);">No registered customers yet — orders can still be placed as a guest.</p>`}
+  `);
+}
+
+/* ---------- admin: manage payments ---------- */
+function pageAdminPayments(){
+  const rows = state.orders.map(o=>`
+    <tr><td class="mono">${o.transactionId}</td><td>${o.number}</td><td>${o.paymentMethod==='esewa'?'eSewa':'Khalti'}</td>
+    <td class="mono">${money(o.total)}</td><td><span class="status-pill ${o.paymentStatus==='Paid'?'Delivered':'Pending'}">${o.paymentStatus}</span></td></tr>`).join('');
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Manage payments</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">Simulated eSewa &amp; Khalti transactions</span></div>
+    ${state.orders.length ? `<table class="admin-table"><thead><tr><th>Transaction ID</th><th>Order #</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>` : `<p style="color:var(--ink-soft);">No payments recorded yet.</p>`}
+  `);
+}
+
+/* ---------- admin: manage reviews ---------- */
+function pageAdminReviews(){
+  const rows = state.reviews.map(r=>{
+    const p = findProduct(r.productId);
+    return `<tr><td>${p?p.name:'(deleted product)'}</td><td>${escapeHtml(r.name)}</td><td>${starRow(r.rating)}</td><td>${escapeHtml(r.comment).slice(0,60)}${r.comment.length>60?'…':''}</td>
+      <td class="admin-actions"><button class="icon-btn delete" data-delete="reviews:${r.id}">Delete</button></td></tr>`;
+  }).join('');
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Manage reviews</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">${state.reviews.length} reviews</span></div>
+    ${state.reviews.length ? `<table class="admin-table"><thead><tr><th>Product</th><th>Customer</th><th>Rating</th><th>Comment</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>` : `<p style="color:var(--ink-soft);">No reviews yet.</p>`}
+  `);
+}
+
+/* ---------- admin: manage coupons ---------- */
+function pageAdminCoupons(){
+  const rows = state.coupons.map(c=>{
+    const editing = state.editingEntity==='coupons' && state.editingId===c.code;
+    if(editing){
+      return adminEditableRow('coupons', c.code, [
+        {key:'code', value:c.code, width:100},
+        {key:'type', type:'select', value:c.type, options:[{value:'percent',label:'Percent'},{value:'flat',label:'Flat'}]},
+        {key:'value', type:'number', value:c.value, width:70},
+        {key:'minOrder', type:'number', value:c.minOrder, width:80},
+        {key:'expiry', type:'date', value:c.expiry, width:130}
+      ]);
+    }
+    return `<tr><td class="mono">${c.code}</td><td>${c.type==='percent'?c.value+'%':money(c.value)}</td><td>${money(c.minOrder)}</td><td>${c.expiry}</td>
+      <td><button class="icon-btn ${c.active?'save':'edit'}" data-togglecoupon="${c.code}">${c.active?'Active':'Inactive'}</button></td>
+      <td class="admin-actions"><button class="icon-btn edit" data-edit-row="coupons:${c.code}">Edit</button><button class="icon-btn delete" data-delete="coupons:${c.code}">Delete</button></td></tr>`;
+  }).join('');
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Manage coupons</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">${state.coupons.length} coupons</span></div>
+    <div class="add-card">
+      <h3 style="font-size:15px;margin-bottom:14px;">Add a coupon</h3>
+      <form id="add-coupon-form">
+        <div class="add-grid">
+          <div><label>Code</label><input name="code" type="text" placeholder="SAVE20" required style="text-transform:uppercase;"></div>
+          <div><label>Type</label><select name="type"><option value="percent">Percent off</option><option value="flat">Flat amount off</option></select></div>
+          <div><label>Value</label><input name="value" type="number" min="0" placeholder="10" required></div>
+          <div><label>Min. order (NPR)</label><input name="minOrder" type="number" min="0" placeholder="500" required></div>
+          <div><label>Expiry date</label><input name="expiry" type="date" required></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:14px;">Add coupon</button>
+      </form>
+    </div>
+    <table class="admin-table"><thead><tr><th>Code</th><th>Discount</th><th>Min. order</th><th>Expiry</th><th>Status</th><th>Actions</th></tr></thead><tbody>${rows}</tbody></table>
+  `);
+}
+
+/* ---------- admin: sales reports ---------- */
+function pageAdminReports(){
+  const totalRevenue = state.orders.reduce((s,o)=>s+o.total,0);
+  const delivered = state.orders.filter(o=>o.status==='Delivered').length;
+  const cancelled = state.orders.filter(o=>o.status==='Cancelled').length;
+  const avgOrder = state.orders.length ? Math.round(totalRevenue/state.orders.length) : 0;
+  const productTotals = {};
+  state.orders.forEach(o=>o.items.forEach(i=>{ productTotals[i.name] = (productTotals[i.name]||0) + i.qty*i.price; }));
+  const topProducts = Object.entries(productTotals).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const maxTop = Math.max(1, ...topProducts.map(t=>t[1]));
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Sales reports</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">All-time</span></div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="lbl">Total revenue</div><div class="val">${money(totalRevenue)}</div></div>
+      <div class="stat-card"><div class="lbl">Orders delivered</div><div class="val">${delivered}</div></div>
+      <div class="stat-card"><div class="lbl">Orders cancelled</div><div class="val">${cancelled}</div></div>
+      <div class="stat-card"><div class="lbl">Average order value</div><div class="val">${money(avgOrder)}</div></div>
+    </div>
+    <div class="stat-card">
+      <div class="lbl" style="margin-bottom:10px;">Top products by revenue</div>
+      ${topProducts.length ? topProducts.map(([name,val])=>`
+        <div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>${name}</span><span class="mono">${money(val)}</span></div>
+          <div style="background:var(--bg);border-radius:5px;height:10px;overflow:hidden;"><div style="height:100%;background:var(--marigold);width:${(val/maxTop)*100}%;"></div></div>
+        </div>`).join('') : `<p style="color:var(--ink-soft);font-size:13px;">No sales data yet.</p>`}
+    </div>
+  `);
+}
+
+/* ---------- admin: banner management ---------- */
+function pageAdminBanners(){
+  const rows = state.banners.map(b=>`
+    <div class="banner-card">
+      <div class="banner-swatch" style="background:${b.theme==='marigold'?'var(--marigold)':b.theme==='brick'?'var(--brick)':'var(--teal)'}"></div>
+      <div style="flex:1;"><strong>${escapeHtml(b.title)}</strong><div style="font-size:12.5px;color:var(--ink-soft);">${escapeHtml(b.subtitle)}</div></div>
+      <button class="icon-btn delete" data-delete="banners:${b.id}">Delete</button>
+    </div>`).join('');
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Banner management</h1><span class="mono" style="font-size:12px;color:var(--ink-soft);">${state.banners.length} banners</span></div>
+    <div class="add-card">
+      <h3 style="font-size:15px;margin-bottom:14px;">Add a homepage banner</h3>
+      <form id="add-banner-form">
+        <div class="add-grid">
+          <div><label>Title</label><input name="title" type="text" placeholder="Dashain Bazaar Offers" required></div>
+          <div><label>Subtitle</label><input name="subtitle" type="text" placeholder="Up to 20% off staples" required></div>
+          <div><label>Theme colour</label><select name="theme"><option value="marigold">Marigold</option><option value="teal">Teal</option><option value="brick">Brick</option></select></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:14px;">Add banner</button>
+      </form>
+    </div>
+    ${rows || `<p style="color:var(--ink-soft);">No banners yet — the homepage will show a default message.</p>`}
+  `);
+}
+
+/* ---------- admin: website settings ---------- */
+function pageAdminSettings(){
+  const s = state.settings;
+  return adminShell(`
+    <div class="admin-bar"><h1 style="font-size:22px;">Website settings</h1></div>
+    <form id="settings-form" class="settings-form">
+      <div class="field-row">
+        <div><label>Site name</label><input name="siteName" type="text" value="${escapeHtml(s.siteName)}"></div>
+        <div><label>Currency symbol</label><input name="currency" type="text" value="${escapeHtml(s.currency)}"></div>
+      </div>
+      <div class="field-row single"><div><label>Tagline</label><input name="tagline" type="text" value="${escapeHtml(s.tagline)}"></div></div>
+      <div class="field-row">
+        <div><label>Support email</label><input name="supportEmail" type="email" value="${escapeHtml(s.supportEmail)}"></div>
+        <div><label>Support phone</label><input name="supportPhone" type="text" value="${escapeHtml(s.supportPhone)}"></div>
+      </div>
+      <div class="field-row">
+        <div><label>Delivery fee (NPR)</label><input name="deliveryFee" type="number" min="0" value="${s.deliveryFee}"></div>
+        <div><label>Free delivery threshold (NPR)</label><input name="freeShipThreshold" type="number" min="0" value="${s.freeShipThreshold}"></div>
+      </div>
+      <button type="submit" class="btn btn-primary">Save settings</button>
+    </form>
+  `);
+}
+
+/* ======================================================================
+   VALIDATION
+   ====================================================================== */
+function validateForm(form, requiredNames){
+  let valid = true, firstInvalid = null;
+  requiredNames.forEach(name=>{
+    const el = form.elements[name];
+    const wrap = form.querySelector(`[data-field="${name}"]`);
+    if(!el || !wrap) return;
+    let ok = el.value && el.value.trim().length>0;
+    if(name==='email' && ok){ ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim()); }
+    wrap.classList.toggle('field-error', !ok);
+    if(!ok){ valid=false; if(!firstInvalid) firstInvalid = el; }
+  });
+  if(firstInvalid) firstInvalid.focus();
+  return valid;
+}
+
+/* ======================================================================
+   RENDER
+   ====================================================================== */
+const CUSTOMER_ROUTES = {
+  home:pageHome, products:pageProducts, categories:pageCategories, search:pageSearch,
+  cart:pageCart, checkout:pageCheckout, 'payment-gateway':pagePaymentGateway,
+  'order-success':pageOrderSuccess, orders:pageOrders,
+  wishlist:pageWishlist, account:pageAccount, contact:pageContact, about:pageAbout, faq:pageFaq
+};
+const ADMIN_ROUTES = {
+  'admin-dashboard':pageAdminDashboard, 'admin-categories':pageAdminCategories, 'admin-products':pageAdminProducts,
+  'admin-orders':pageAdminOrders, 'admin-customers':pageAdminCustomers, 'admin-payments':pageAdminPayments,
+  'admin-reviews':pageAdminReviews, 'admin-coupons':pageAdminCoupons, 'admin-reports':pageAdminReports,
+  'admin-banners':pageAdminBanners, 'admin-settings':pageAdminSettings
+};
+
+function render(){
+  const app = document.getElementById('app');
+  let html;
+  if(state.route === 'admin-login'){
+    html = pageAdminLogin();
+  } else if(ADMIN_ROUTES[state.route]){
+    if(!state.isAdmin){ state.route = 'admin-login'; html = pageAdminLogin(); }
+    else html = ADMIN_ROUTES[state.route]();
+  } else if(state.route === 'product'){
+    html = `${headerHTML()}<main>${pageProductDetails(state.routeParam)}</main>${footerHTML()}`;
+  } else if(state.route === 'order-track'){
+    html = `${headerHTML()}<main>${pageOrderTrack(state.routeParam)}</main>${footerHTML()}`;
+  } else if(CUSTOMER_ROUTES[state.route]){
+    html = `${headerHTML()}<main>${CUSTOMER_ROUTES[state.route]()}</main>${footerHTML()}`;
+  } else {
+    html = `${headerHTML()}<main>${pageHome()}</main>${footerHTML()}`;
+  }
+  app.innerHTML = html;
+  if(state.toast){ const t=document.createElement('div'); t.className='save-toast'; t.textContent=state.toast; document.body.appendChild(t); }
+  attachEvents();
+}
+
+/* ======================================================================
+   EVENTS
+   ====================================================================== */
+function attachEvents(){
+  document.querySelectorAll('[data-nav]').forEach(el=>{
+    el.addEventListener('click', e=>{
+      e.preventDefault();
+      const param = el.getAttribute('data-navparam') || null;
+      navigate(el.getAttribute('data-nav'), param);
+    });
+  });
+  document.querySelectorAll('[data-catnav]').forEach(el=>{
+    el.addEventListener('click', e=>{ e.preventDefault(); state.filter = el.getAttribute('data-catnav'); navigate('products'); });
+  });
+  document.querySelectorAll('[data-filter]').forEach(el=>{
+    el.addEventListener('click', e=>{ e.preventDefault(); state.filter = el.getAttribute('data-filter'); render(); });
+  });
+  document.querySelectorAll('[data-open]').forEach(el=>{
+    el.addEventListener('click', ()=> navigate('product', el.getAttribute('data-open')));
+  });
+  document.querySelectorAll('[data-add]').forEach(el=>{
+    el.addEventListener('click', ()=> addToCart(el.getAttribute('data-add')));
+  });
+  document.querySelectorAll('[data-inc]').forEach(el=>{
+    el.addEventListener('click', ()=>{ const id=el.getAttribute('data-inc'); setQty(id,(state.cart[id]||0)+1); });
+  });
+  document.querySelectorAll('[data-inc-safe]').forEach(el=>{
+    el.addEventListener('click', ()=>{ const id=el.getAttribute('data-inc-safe'); setQty(id,(state.cart[id]||1)+1); });
+  });
+  document.querySelectorAll('[data-dec]').forEach(el=>{
+    el.addEventListener('click', ()=>{ const id=el.getAttribute('data-dec'); setQty(id,(state.cart[id]||0)-1); });
+  });
+  document.querySelectorAll('[data-remove]').forEach(el=>{
+    el.addEventListener('click', ()=> setQty(el.getAttribute('data-remove'), 0));
+  });
+  document.querySelectorAll('[data-wish]').forEach(el=>{
+    el.addEventListener('click', ()=> toggleWishlist(el.getAttribute('data-wish')));
+  });
+  document.querySelectorAll('[data-hero]').forEach(el=>{
+    el.addEventListener('click', ()=>{ state.heroSlide = parseInt(el.getAttribute('data-hero'),10); render(); });
+  });
+
+  const headerSearch = document.getElementById('header-search-form');
+  if(headerSearch){
+    headerSearch.addEventListener('submit', e=>{
+      e.preventDefault();
+      state.searchQuery = new FormData(headerSearch).get('q') || '';
+      navigate('search');
+    });
+  }
+
+  const applyCouponBtn = document.getElementById('apply-coupon-btn');
+  if(applyCouponBtn){
+    applyCouponBtn.addEventListener('click', ()=>{
+      const input = document.getElementById('coupon-input');
+      const code = (input.value||'').trim().toUpperCase();
+      const c = state.coupons.find(c=>c.code===code && c.active);
+      if(!c){ showToast('Invalid or inactive coupon code.'); state.appliedCoupon=null; render(); return; }
+      if(new Date(c.expiry) < new Date()){ showToast('This coupon has expired.'); state.appliedCoupon=null; render(); return; }
+      if(cartSubtotal() < c.minOrder){ showToast(`Minimum order for this coupon is ${money(c.minOrder)}.`); state.appliedCoupon=null; render(); return; }
+      state.appliedCoupon = c;
+      showToast(`Coupon ${c.code} applied.`);
+      render();
+    });
+  }
+
+  /* ---- checkout ---- */
+  document.querySelectorAll('[data-paymethod]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      document.querySelectorAll('.pay-opt').forEach(p=>p.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('paymentMethod').value = el.getAttribute('data-paymethod');
+    });
+  });
+  const checkoutForm = document.getElementById('checkout-form');
+  if(checkoutForm){
+    checkoutForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const required = ['fullName','email','phone','address','city','zip','window'];
+      let valid = validateForm(checkoutForm, required);
+      const method = checkoutForm.elements['paymentMethod'].value;
+      const methodWrap = checkoutForm.querySelector('[data-field="paymentMethod"]');
+      if(!method){ methodWrap.classList.add('field-error'); valid=false; } else { methodWrap.classList.remove('field-error'); }
+      if(!valid) return;
+      const data = Object.fromEntries(new FormData(checkoutForm).entries());
+      const subtotal = cartSubtotal();
+      const discount = couponDiscount(subtotal);
+      const shipping = (subtotal-discount) >= state.settings.freeShipThreshold ? 0 : state.settings.deliveryFee;
+      const total = subtotal - discount + shipping;
+      state.pendingCheckout = { ...data, subtotal, discount, shipping, total };
+      state.pendingPaymentMethod = method;
+      navigate('payment-gateway');
+    });
+  }
+
+  /* ---- payment gateway simulation ---- */
+  const payBtn = document.getElementById('simulate-pay-btn');
+  if(payBtn){
+    payBtn.addEventListener('click', ()=>{
+      const co = state.pendingCheckout, method = state.pendingPaymentMethod;
+      const orderItems = Object.entries(state.cart).map(([id,qty])=>{ const p=findProduct(id); return {id, name:p.name, qty, price:p.price}; });
+      const order = {
+        id:'o'+Date.now(), number:orderNumber(),
+        name:co.fullName, email:co.email, phone:co.phone,
+        customerEmail: state.currentUser ? state.currentUser.email : null,
+        address:co.address, city:co.city, zip:co.zip, window:co.window,
+        paymentMethod:method, paymentStatus:'Paid', transactionId:txnId(method==='esewa'?'ESW':'KHL'),
+        status:'Pending', placedAt:new Date().toISOString(),
+        items:orderItems, subtotal:co.subtotal, discount:co.discount, shipping:co.shipping, total:co.total,
+        couponCode: state.appliedCoupon ? state.appliedCoupon.code : null
+      };
+      state.orders.unshift(order);
+      save(KEYS.orders, state.orders);
+      state.lastOrderId = order.id;
+      state.cart = {}; save(KEYS.cart, state.cart);
+      state.appliedCoupon = null; state.pendingCheckout=null; state.pendingPaymentMethod=null;
+      navigate('order-success');
+    });
+  }
+  const cancelPayBtn = document.getElementById('simulate-cancel-btn');
+  if(cancelPayBtn){ cancelPayBtn.addEventListener('click', ()=> navigate('checkout')); }
+
+  /* ---- product review form ---- */
+  const reviewForm = document.getElementById('review-form');
+  if(reviewForm){
+    reviewForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(reviewForm).entries());
+      if(!data.name || !data.comment){ showToast('Please add your name and a comment.'); return; }
+      const productId = reviewForm.getAttribute('data-product');
+      const newReview = { id:'rev'+Date.now(), productId, name:data.name, rating:parseInt(data.rating,10), comment:data.comment, date:new Date().toISOString().slice(0,10) };
+      state.reviews.unshift(newReview); save(KEYS.reviews, state.reviews);
+      const p = findProduct(productId);
+      if(p){ const list = state.reviews.filter(r=>r.productId===p.id); p.reviews = list.length; p.rating = list.reduce((s,r)=>s+r.rating,0)/list.length; save(KEYS.products, state.products); }
+      showToast('Review submitted — thank you!');
+      render();
+    });
+  }
+
+  /* ---- contact form ---- */
+  const contactForm = document.getElementById('contact-form');
+  if(contactForm){
+    contactForm.addEventListener('submit', e=>{ e.preventDefault(); showToast('Message sent — our team will reply by email.'); contactForm.reset(); });
+  }
+
+  /* ---- FAQ accordion ---- */
+  document.querySelectorAll('.faq-item .faq-q').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ btn.closest('.faq-item').classList.toggle('open'); });
+  });
+
+  /* ---- customer auth ---- */
+  document.querySelectorAll('[data-authmode]').forEach(el=>{
+    el.addEventListener('click', ()=>{ state.authMode = el.getAttribute('data-authmode'); state.authError=''; render(); });
+  });
+  const authForm = document.getElementById('auth-form');
+  if(authForm){
+    authForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(authForm).entries());
+      const email = (data.email||'').trim().toLowerCase();
+      const password = data.password||'';
+      if(state.authMode==='signup'){
+        const name = (data.name||'').trim();
+        if(!name||!email||!password){ state.authError='Fill in every field to create an account.'; render(); return; }
+        if(state.users.some(u=>u.email===email)){ state.authError='An account with that email already exists.'; render(); return; }
+        const newUser = { name, email, password, phone:'', address:'', city:'', zip:'' };
+        state.users.push(newUser); save(KEYS.users, state.users);
+        state.currentUser = { name, email }; save(KEYS.session, state.currentUser);
+        state.authError=''; navigate('account');
+      } else {
+        const match = state.users.find(u=>u.email===email && u.password===password);
+        if(!match){ state.authError='Email or password is incorrect.'; render(); return; }
+        state.currentUser = { ...match }; delete state.currentUser.password;
+        save(KEYS.session, state.currentUser);
+        state.authError=''; navigate('account');
+      }
+    });
+  }
+  const logoutBtn = document.getElementById('logout-btn');
+  if(logoutBtn){ logoutBtn.addEventListener('click', ()=>{ state.currentUser=null; save(KEYS.session,null); navigate('home'); }); }
+
+  document.querySelectorAll('[data-profiletab]').forEach(el=>{
+    el.addEventListener('click', ()=> navigate('account', el.getAttribute('data-profiletab')));
+  });
+  const profileDetailsForm = document.getElementById('profile-details-form');
+  if(profileDetailsForm){
+    profileDetailsForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(profileDetailsForm).entries());
+      state.currentUser.name = data.name; state.currentUser.phone = data.phone;
+      const u = state.users.find(u=>u.email===state.currentUser.email);
+      if(u){ u.name=data.name; u.phone=data.phone; save(KEYS.users, state.users); }
+      save(KEYS.session, state.currentUser);
+      showToast('Details saved.'); render();
+    });
+  }
+  const profileAddressForm = document.getElementById('profile-address-form');
+  if(profileAddressForm){
+    profileAddressForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(profileAddressForm).entries());
+      Object.assign(state.currentUser, data);
+      const u = state.users.find(u=>u.email===state.currentUser.email);
+      if(u) Object.assign(u, data);
+      save(KEYS.users, state.users); save(KEYS.session, state.currentUser);
+      showToast('Address saved.'); render();
+    });
+  }
+
+  /* ---- admin login/logout ---- */
+  const adminLoginForm = document.getElementById('admin-login-form');
+  if(adminLoginForm){
+    adminLoginForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(adminLoginForm).entries());
+      if(data.email===ADMIN_CREDENTIALS.email && data.password===ADMIN_CREDENTIALS.password){
+        state.isAdmin=true; save(KEYS.adminSession, true); state.adminError=''; navigate('admin-dashboard');
+      } else { state.adminError='Incorrect admin email or password.'; render(); }
+    });
+  }
+  const adminLogoutBtn = document.getElementById('admin-logout-btn');
+  if(adminLogoutBtn){ adminLogoutBtn.addEventListener('click', ()=>{ state.isAdmin=false; save(KEYS.adminSession,false); navigate('home'); }); }
+
+  /* ---- admin generic edit-row triggers ---- */
+  document.querySelectorAll('[data-edit-row]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const [entity,id] = el.getAttribute('data-edit-row').split(':');
+      state.editingEntity = entity; state.editingId = id; render();
+    });
+  });
+  document.querySelectorAll('[data-save]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const [entity,id] = el.getAttribute('data-save').split(':');
+      const row = document.querySelector(`[data-editrow="${id}"]`);
+      if(!row) return;
+      if(entity==='categories'){
+        const c = CATEGORIES.find(c=>c.id===id);
+        if(c) c.name = row.querySelector('[data-edit="name"]').value;
+      } else if(entity==='products'){
+        const p = findProduct(id);
+        if(p){
+          p.name = row.querySelector('[data-edit="name"]').value;
+          p.cat = row.querySelector('[data-edit="cat"]').value;
+          p.unit = row.querySelector('[data-edit="unit"]').value;
+          p.price = parseFloat(row.querySelector('[data-edit="price"]').value) || p.price;
+          p.stock = parseInt(row.querySelector('[data-edit="stock"]').value,10) || 0;
+          p.tag = row.querySelector('[data-edit="tag"]').value;
+          save(KEYS.products, state.products);
+        }
+      } else if(entity==='coupons'){
+        const c = state.coupons.find(c=>c.code===id);
+        if(c){
+          c.code = row.querySelector('[data-edit="code"]').value.toUpperCase();
+          c.type = row.querySelector('[data-edit="type"]').value;
+          c.value = parseFloat(row.querySelector('[data-edit="value"]').value)||0;
+          c.minOrder = parseFloat(row.querySelector('[data-edit="minOrder"]').value)||0;
+          c.expiry = row.querySelector('[data-edit="expiry"]').value;
+          save(KEYS.coupons, state.coupons);
+        }
+      }
+      state.editingEntity=null; state.editingId=null;
+      showToast('Saved.'); render();
+    });
+  });
+  document.querySelectorAll('[data-delete]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const [entity,id] = el.getAttribute('data-delete').split(':');
+      if(!confirm('Remove this item?')) return;
+      if(entity==='products'){ state.products = state.products.filter(p=>p.id!==id); save(KEYS.products, state.products); }
+      else if(entity==='orders'){ state.orders = state.orders.filter(o=>o.id!==id); save(KEYS.orders, state.orders); }
+      else if(entity==='users'){ state.users = state.users.filter(u=>u.email!==id); save(KEYS.users, state.users); }
+      else if(entity==='reviews'){ state.reviews = state.reviews.filter(r=>r.id!==id); save(KEYS.reviews, state.reviews); }
+      else if(entity==='coupons'){ state.coupons = state.coupons.filter(c=>c.code!==id); save(KEYS.coupons, state.coupons); }
+      else if(entity==='banners'){ state.banners = state.banners.filter(b=>b.id!==id); save(KEYS.banners, state.banners); }
+      render();
+    });
+  });
+  document.querySelectorAll('[data-togglecoupon]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const c = state.coupons.find(c=>c.code===el.getAttribute('data-togglecoupon'));
+      if(c){ c.active = !c.active; save(KEYS.coupons, state.coupons); render(); }
+    });
+  });
+  document.querySelectorAll('[data-orderstatus]').forEach(el=>{
+    el.addEventListener('change', ()=>{
+      const o = state.orders.find(o=>o.id===el.getAttribute('data-orderstatus'));
+      if(o){ o.status = el.value; save(KEYS.orders, state.orders); showToast(`Order #${o.number} marked ${o.status}.`); render(); }
+    });
+  });
+
+  /* ---- admin add forms ---- */
+  const addProductForm = document.getElementById('add-product-form');
+  if(addProductForm){
+    addProductForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(addProductForm).entries());
+      const price = parseFloat(data.price), stock = parseInt(data.stock,10);
+      if(!data.name||!data.unit||!data.tag||isNaN(price)||price<0||isNaN(stock)) return;
+      state.products.push({ id:'p'+Date.now(), name:data.name, unit:data.unit, price, mrp:price, cat:data.cat, icon:data.icon, tag:data.tag, stock, rating:4.0, reviews:0 });
+      save(KEYS.products, state.products);
+      addProductForm.reset(); showToast('Product added.'); render();
+    });
+  }
+  const addCouponForm = document.getElementById('add-coupon-form');
+  if(addCouponForm){
+    addCouponForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(addCouponForm).entries());
+      const code = (data.code||'').trim().toUpperCase();
+      if(!code || state.coupons.some(c=>c.code===code)){ showToast('Enter a unique coupon code.'); return; }
+      state.coupons.push({ code, type:data.type, value:parseFloat(data.value)||0, minOrder:parseFloat(data.minOrder)||0, active:true, expiry:data.expiry });
+      save(KEYS.coupons, state.coupons);
+      addCouponForm.reset(); showToast('Coupon added.'); render();
+    });
+  }
+  const addBannerForm = document.getElementById('add-banner-form');
+  if(addBannerForm){
+    addBannerForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(addBannerForm).entries());
+      if(!data.title||!data.subtitle) return;
+      state.banners.push({ id:'b'+Date.now(), title:data.title, subtitle:data.subtitle, theme:data.theme });
+      save(KEYS.banners, state.banners);
+      addBannerForm.reset(); showToast('Banner added.'); render();
+    });
+  }
+  const settingsForm = document.getElementById('settings-form');
+  if(settingsForm){
+    settingsForm.addEventListener('submit', e=>{
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(settingsForm).entries());
+      state.settings = {
+        ...state.settings, siteName:data.siteName, currency:data.currency, tagline:data.tagline,
+        supportEmail:data.supportEmail, supportPhone:data.supportPhone,
+        deliveryFee:parseFloat(data.deliveryFee)||0, freeShipThreshold:parseFloat(data.freeShipThreshold)||0
+      };
+      save(KEYS.settings, state.settings);
+      showToast('Settings saved.'); render();
+    });
+  }
+}
+
+render();
+
+</script>
+</body>
+</html>
